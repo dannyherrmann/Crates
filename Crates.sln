@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crates", "Crates\Crates.csproj", "{48083AC1-3468-4881-BF05-CAE2C3D67215}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48083AC1-3468-4881-BF05-CAE2C3D67215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48083AC1-3468-4881-BF05-CAE2C3D67215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48083AC1-3468-4881-BF05-CAE2C3D67215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48083AC1-3468-4881-BF05-CAE2C3D67215}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F9C72BE9-910B-4055-A7F2-4FDE6DCA17FE}
+	EndGlobalSection
+EndGlobal
