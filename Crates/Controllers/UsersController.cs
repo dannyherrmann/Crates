@@ -19,4 +19,15 @@ public class UsersController : Controller
     {
         return Ok(_userRepo.GetAll());
     }
+
+    [HttpGet("uid/{uid}")]
+    public IActionResult GetUserByUid(string uid)
+    {
+        var user = _userRepo.GetUserByUid(uid);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        return Ok(user);
+    }
 }

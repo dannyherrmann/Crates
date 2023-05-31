@@ -5,5 +5,7 @@ namespace Crates.Repositories
     public interface IUserRepository
     {
         List<User> GetAll();
+
+        User GetUserByUid(string uid);
     }
 }

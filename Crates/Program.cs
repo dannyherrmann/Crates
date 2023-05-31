@@ -9,6 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IAlbumRepository, AlbumRepository>();
 
 var app = builder.Build();
 
