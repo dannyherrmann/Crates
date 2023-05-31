@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS [AlbumStyles];
 DROP TABLE IF EXISTS [Genres];
 DROP TABLE IF EXISTS [Styles];
 DROP TABLE IF EXISTS [UserAlbums];
-DROP TABLE IF EXISTS [UserWants];
+DROP TABLE IF EXISTS [UserDigs];
 DROP TABLE IF EXISTS [CrateTracks];
 DROP TABLE IF EXISTS [Tracks];
 DROP TABLE IF EXISTS [Albums];
@@ -51,7 +51,7 @@ CREATE TABLE [UserAlbums] (
 
 GO
 
-CREATE TABLE [UserWants] (
+CREATE TABLE [UserDigs] (
     [id] int PRIMARY KEY identity,
     [userId] int NOT NULL,
     [albumId] int NOT NULL,
@@ -171,7 +171,7 @@ ALTER TABLE [UserAlbums] ADD FOREIGN KEY ([userId]) REFERENCES [Users] ([id])
 
 GO
 
-ALTER TABLE [UserWants] ADD FOREIGN KEY ([userId]) REFERENCES [Users] ([id])
+ALTER TABLE [UserDigs] ADD FOREIGN KEY ([userId]) REFERENCES [Users] ([id])
 
 GO
 
@@ -263,7 +263,7 @@ INSERT INTO [Albums] ([name], [year], catalogNumber, photo, dateAdded, countryId
 VALUES
     ('Jump (For My Love)', 1984, 'YW-13781', 'https://firebasestorage.googleapis.com/v0/b/crates-6a625.appspot.com/o/jump.jpg?alt=media&token=b9ac257a-10d7-4416-853b-73433da9e3da', '2005-03-21T00:59:51.000Z', 1, 1, 1, 1, 1),
     ('Wanna Grove', 1983, 'CAT 2004', 'https://firebasestorage.googleapis.com/v0/b/crates-6a625.appspot.com/o/key-west-wannagroove.jpg?alt=media&token=9b246c98-2496-429a-8382-d2562e96b8d3', '2008-12-14T04:41:00.000Z', 5, 2, 2, 1, 1),
-    ('Feel It', 1981, '600 350', 'https://firebasestorage.googleapis.com/v0/b/crates-6a625.appspot.com/o/revelation.jpg?alt=media&token=107037ec-2eec-4add-a069-be556a44dda3', '2008-04-25T09:17:29.00.000Z', 3, 3, 3, 1, 2)
+    ('Feel It', 1981, '600 350', 'https://firebasestorage.googleapis.com/v0/b/crates-6a625.appspot.com/o/revelation.jpg?alt=media&token=107037ec-2eec-4add-a069-be556a44dda3', '2008-04-25T09:17:29.000Z', 3, 3, 3, 1, 2)
 GO
 INSERT INTO [Genres] ([name])
 VALUES
@@ -303,7 +303,7 @@ VALUES
     ('Wanna Groove', 'A', '00:05:27', 110, '10B', 2),
     ('Shake Together', 'B', '00:03:35', null, null, 2),
     ('Feel It', 'A', '00:05:36', 115, '4A', 3),
-    ('Walk On The Wild Side', '00:06:45', 120, '4A', 3)
+    ('Walk On The Wild Side', 'B', '00:06:45', 120, '4A', 3)
 GO
 INSERT INTO [UserCrates] ([name], userId, dateCreated)
 VALUES 
@@ -319,7 +319,7 @@ VALUES
     (1, 1, '2021-08-04T13:56:30.000Z'),
     (1, 3, '2021-07-25T09:21:30.000Z')
 GO
-INSERT INTO [UserWants] (userId, albumId, dateAdded)
+INSERT INTO [UserDigs] (userId, albumId, dateAdded)
 VALUES
     (1, 2, '2023-05-23T12:45:30.000Z')
 GO

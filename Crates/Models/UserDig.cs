@@ -1,6 +1,6 @@
 ﻿namespace Crates.Models;
 
-public class UserWant
+public class UserDig
 {
     public int Id { get; set; }
     public int UserId { get; set; }
