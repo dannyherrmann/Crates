@@ -1,4 +1,5 @@
-﻿using Crates.Repositories;
+﻿using Crates.Models;
+using Crates.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crates.Controllers;
@@ -18,5 +19,42 @@ public class AlbumsController : Controller
     public IActionResult GetAllAlbums(int? pageNumber, int? pageSize, AlbumRepository.SortOrder sortOrder, string? genres = null, string? styles = null, string? searchCriterion = null)
     {
         return Ok(_albumRepo.GetAllAlbums(pageNumber, pageSize, sortOrder, genres, styles, searchCriterion));
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        var album = _albumRepo.GetById(id);
+        if (album == null)
+        {
+            return NotFound();
+        }
+        return Ok(album);
+    }
+
+    [HttpPost]
+    public IActionResult Post(Album album)
+    {
+        _albumRepo.Add(album);
+        return Created("/album/" + album.Id, album);
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult Put(int id, Album album)
+    {
+        if (id != album.Id)
+        {
+            return BadRequest();
+        }
+
+        _albumRepo.Update(album);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _albumRepo.Delete(id);
+        return NoContent();
     }
 }

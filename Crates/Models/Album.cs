@@ -15,7 +15,7 @@ public class Album
     public int? LabelId { get; set; }
     public int? SizeId { get; set; }
     public int? SpeedId { get; set; }
-    public Artist Artist { get; set; }
+    public Artist? Artist { get; set; }
     public Country? Country { get; set; }
     public Label? Label { get; set; }
     public Size? Size { get; set; } 

@@ -190,4 +190,231 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
             }
         }
     }
+
+    public Album GetById(int id)
+    {
+        using (var conn = Connection)
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"SELECT
+                                        al.id AS albumTableId,
+                                        al.name AS albumName,
+                                        al.[year],
+                                        al.catalogNumber,
+                                        al.photo AS albumPhoto,
+                                        al.dateAdded,
+                                        ar.id AS artistTableId,
+                                        ar.name AS artistName,
+                                        ar.bio AS artistBio,
+                                        ar.photo AS artistPhoto,
+                                        la.id AS labelTableId,
+                                        la.name AS labelName,
+                                        la.photo AS labelPhoto,
+                                        co.id AS countryTableId,
+                                        co.name AS countryName,
+                                        si.id AS sizeTableId,
+                                        si.name AS sizeName,
+                                        sp.id AS speedTableId,
+                                        sp.name AS speedName,
+                                        (SELECT STRING_AGG(g.name, ', ')
+                                        FROM AlbumGenres ag JOIN Genres g ON ag.genreId = g.id
+                                        WHERE ag.albumId = al.id) AS genres,
+                                        (SELECT STRING_AGG(s.name, ', ')
+                                        FROM AlbumStyles asl JOIN Styles s ON asl.styleId = s.id
+                                        WHERE asl.albumId = al.id) AS styles
+                                    FROM Albums al
+                                        JOIN Artists ar ON al.artistId = ar.id
+                                        JOIN Labels la ON al.labelId = la.id
+                                        JOIN Countries co ON al.countryId = co.id
+                                        JOIN Sizes si ON al.sizeId = si.id
+                                        JOIN Speeds sp ON al.speedId = sp.id
+                                    WHERE al.id = @id";
+
+                DbUtils.AddParameter(cmd, "id", id);
+
+                var reader = cmd.ExecuteReader();
+
+                Album album = null;
+
+                if (reader.Read())
+                {
+                    var countryId = DbUtils.GetNullableInt(reader, "countryTableId");
+                    var labelId = DbUtils.GetNullableInt(reader, "labelTableId");
+                    var sizeId = DbUtils.GetNullableInt(reader, "sizeTableId");
+                    var speedId = DbUtils.GetNullableInt(reader, "speedTableId");
+
+                    Country country = null;
+                    Label label = null;
+                    Size size = null;
+                    Speed speed = null;
+
+                    if (countryId.HasValue)
+                    {
+                        country = new Country()
+                        {
+                            Id = countryId.Value,
+                            Name = DbUtils.GetString(reader, "countryName")
+                        };
+                    }
+
+                    if (labelId.HasValue)
+                    {
+                        label = new Label()
+                        {
+                            Id = labelId.Value,
+                            Name = DbUtils.GetString(reader, "labelName"),
+                            Photo = DbUtils.GetString(reader, "labelPhoto")
+                        };
+                    }
+
+                    if (sizeId.HasValue)
+                    {
+                        size = new Size()
+                        {
+                            Id = sizeId.Value,
+                            Name = DbUtils.GetString(reader, "sizeName")
+                        };
+                    }
+
+                    if (speedId.HasValue)
+                    {
+                        speed = new Speed()
+                        {
+                            Id = speedId.Value,
+                            Name = DbUtils.GetString(reader, "speedName")
+                        };
+                    }
+
+                    album = new Album()
+                    {
+                        Id = DbUtils.GetInt(reader, "albumTableId"),
+                        Name = DbUtils.GetString(reader, "albumName"),
+                        Year = DbUtils.GetInt(reader, "year"),
+                        CatalogNumber = DbUtils.GetString(reader, "catalogNumber"),
+                        Photo = DbUtils.GetString(reader, "albumPhoto"),
+                        DateAdded = DbUtils.GetDateTime(reader, "dateAdded"),
+                        CountryId = countryId,
+                        ArtistId = DbUtils.GetInt(reader, "artistTableId"),
+                        LabelId = labelId,
+                        SizeId = sizeId,
+                        SpeedId = speedId,
+                        Genres = DbUtils.GetString(reader, "genres"),
+                        Styles = DbUtils.GetString(reader, "styles"),
+                        Artist = new Artist()
+                        {
+                            Id = DbUtils.GetInt(reader, "artistTableId"),
+                            Name = DbUtils.GetString(reader, "artistName"),
+                            Bio = DbUtils.GetString(reader, "artistBio"),
+                            Photo = DbUtils.GetString(reader, "artistPhoto")
+                        },
+                        Country = country,
+                        Label = label,
+                        Size = size,
+                        Speed = speed
+                    };
+                }
+
+                reader.Close();
+                return album;
+            }
+        }
+    }
+
+    public void Add(Album album)
+    {
+        using (var conn = Connection)
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"INSERT INTO Albums
+                                        (name,
+                                        [year],
+                                        catalogNumber,
+                                        photo,
+                                        dateAdded,
+                                        artistId,
+                                        countryId,
+                                        labelId,
+                                        sizeId,
+                                        speedId)
+                                        OUTPUT inserted.id
+                                        VALUES
+                                            (@name,
+                                            @year,
+                                            @catalogNumber,
+                                            @photo,
+                                            @dateAdded,
+                                            @artistId,
+                                            @countryId,
+                                            @labelId,
+                                            @sizeId,
+                                            @speedId)";
+
+                DbUtils.AddParameter(cmd, "@name", album.Name);
+                DbUtils.AddParameter(cmd, "@year", album.Year);
+                DbUtils.AddParameter(cmd, "@catalogNumber", album.CatalogNumber);
+                DbUtils.AddParameter(cmd, "@photo", album.Photo);
+                DbUtils.AddParameter(cmd, "@dateAdded", album.DateAdded);
+                DbUtils.AddParameter(cmd, "@artistId", album.ArtistId);
+                DbUtils.AddParameter(cmd, "@countryId", album.CountryId);
+                DbUtils.AddParameter(cmd, "@labelId", album.LabelId);
+                DbUtils.AddParameter(cmd, "@sizeId", album.SizeId);
+                DbUtils.AddParameter(cmd, "@speedId", album.SpeedId);
+                album.Id = (int)cmd.ExecuteScalar();
+            }
+        }
+    }
+
+    public void Update(Album album)
+    {
+        using (var conn = Connection)
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"UPDATE Albums
+                                        SET name = @name,
+                                            [year] = @year,
+                                            catalogNumber = @catalogNumber,
+                                            photo = @photo,
+                                            dateAdded = @dateAdded,
+                                            artistId = @artistId,
+                                            countryId = @countryId,
+                                            labelId = @labelId,
+                                            sizeId = @sizeId,
+                                            speedId = @speedId
+                                            WHERE id = @id";
+
+                DbUtils.AddParameter(cmd, "id", album.Id);
+                DbUtils.AddParameter(cmd, "@name", album.Name);
+                DbUtils.AddParameter(cmd, "@year", album.Year);
+                DbUtils.AddParameter(cmd, "@catalogNumber", album.CatalogNumber);
+                DbUtils.AddParameter(cmd, "@photo", album.Photo);
+                DbUtils.AddParameter(cmd, "@dateAdded", album.DateAdded);
+                DbUtils.AddParameter(cmd, "@artistId", album.ArtistId);
+                DbUtils.AddParameter(cmd, "@countryId", album.CountryId);
+                DbUtils.AddParameter(cmd, "@labelId", album.LabelId);
+                DbUtils.AddParameter(cmd, "@sizeId", album.SizeId);
+                DbUtils.AddParameter(cmd, "@speedId", album.SpeedId);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
+    public void Delete(int id)
+    {
+        using (var conn = Connection)
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "DELETE FROM Albums WHERE id = @id";
+                DbUtils.AddParameter(cmd, "@id", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
 }
