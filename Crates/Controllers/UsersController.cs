@@ -1,4 +1,5 @@
-﻿using Crates.Repositories;
+﻿using Crates.Models;
+using Crates.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crates.Controllers;
@@ -20,6 +21,17 @@ public class UsersController : Controller
         return Ok(_userRepo.GetAll());
     }
 
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        var user = _userRepo.GetById(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        return Ok(user);
+    }
+
     [HttpGet("uid/{uid}")]
     public IActionResult GetUserByUid(string uid)
     {
@@ -30,4 +42,32 @@ public class UsersController : Controller
         }
         return Ok(user);
     }
+
+    [HttpPost]
+    public IActionResult Post(User user)
+    {
+        _userRepo.Add(user);
+        return Created("/user/" + user.Id, user);
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult Put(int id, User user)
+    {
+        if (id != user.Id)
+        {
+            return BadRequest();
+        }
+
+        _userRepo.Update(user);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _userRepo.Delete(id);
+        return NoContent();
+    }
+
+
 }
