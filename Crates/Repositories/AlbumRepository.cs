@@ -232,7 +232,7 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
                                         JOIN Speeds sp ON al.speedId = sp.id
                                     WHERE al.id = @id";
 
-                DbUtils.AddParameter(cmd, "id", id);
+                DbUtils.AddParameter(cmd, "@id", id);
 
                 var reader = cmd.ExecuteReader();
 
@@ -388,7 +388,7 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
                                             speedId = @speedId
                                             WHERE id = @id";
 
-                DbUtils.AddParameter(cmd, "id", album.Id);
+                DbUtils.AddParameter(cmd, "@id", album.Id);
                 DbUtils.AddParameter(cmd, "@name", album.Name);
                 DbUtils.AddParameter(cmd, "@year", album.Year);
                 DbUtils.AddParameter(cmd, "@catalogNumber", album.CatalogNumber);

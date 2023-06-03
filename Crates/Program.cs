@@ -11,6 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IAlbumRepository, AlbumRepository>();
 builder.Services.AddTransient<IUserAlbumRepository, UserAlbumRepository>();
+builder.Services.AddTransient<IArtistRepository, ArtistRepository>();
 
 var app = builder.Build();
 
