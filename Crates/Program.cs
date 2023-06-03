@@ -12,6 +12,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IAlbumRepository, AlbumRepository>();
 builder.Services.AddTransient<IUserAlbumRepository, UserAlbumRepository>();
 builder.Services.AddTransient<IArtistRepository, ArtistRepository>();
+builder.Services.AddTransient<ITrackRepository, TrackRepository>();
 
 var app = builder.Build();
 
