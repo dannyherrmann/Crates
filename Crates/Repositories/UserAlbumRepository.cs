@@ -206,4 +206,44 @@ public class UserAlbumRepository : BaseRepository, IUserAlbumRepository
             }
         }
     }
+
+    public void Add(UserAlbum userAlbum)
+    {
+        using (var conn = Connection)
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"INSERT INTO [UserAlbums]
+                                        (userId,
+                                        albumId,
+                                        dateAdded)
+                                    OUTPUT inserted.id
+                                    VALUES
+                                        (@userId,
+                                        @albumId,
+                                        @dateAdded)";
+
+                DbUtils.AddParameter(cmd, "@userId", userAlbum.UserId);
+                DbUtils.AddParameter(cmd, "@albumId", userAlbum.AlbumId);
+                DbUtils.AddParameter(cmd, "@dateAdded", userAlbum.DateAdded);
+
+                userAlbum.Id = (int)cmd.ExecuteScalar();
+            }
+        }
+    }
+
+    public void Delete(int id)
+    {
+        using (var conn = Connection)
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "DELETE FROM [UserAlbums] WHERE id = @id";
+                DbUtils.AddParameter(cmd, "@id", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
 }

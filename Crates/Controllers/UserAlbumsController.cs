@@ -21,4 +21,18 @@ public class UserAlbumsController : Controller
     {
         return Ok(_userAlbumRepo.GetUserAlbums(userId, pageNumber, pageSize, sortOrder, genres, styles, searchCriterion));
     }
+
+    [HttpPost]
+    public IActionResult AddUserAlbum(UserAlbum userAlbum)
+    {
+        _userAlbumRepo.Add(userAlbum);
+        return Created("/userAlbum/" + userAlbum.Id, userAlbum);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _userAlbumRepo.Delete(id);
+        return NoContent();
+    }
 }

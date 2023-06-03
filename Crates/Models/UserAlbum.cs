@@ -6,6 +6,6 @@ public class UserAlbum
     public int UserId { get; set; }
     public int AlbumId { get; set; }
     public DateTime DateAdded { get; set; }
-    public Album Album { get; set; }
+    public Album? Album { get; set; }
 
 }
