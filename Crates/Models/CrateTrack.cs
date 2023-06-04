@@ -6,5 +6,6 @@ public class CrateTrack
     public int CrateId { get; set; }
     public int TrackId { get; set; }
     public int Bpm { get; set; }
+    public Track? track { get; set; }
 
 }

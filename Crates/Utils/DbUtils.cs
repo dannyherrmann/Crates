@@ -30,6 +30,11 @@ public static class DbUtils
         return reader.GetDateTime(reader.GetOrdinal(column));
     }
 
+    public static TimeSpan GetTimeSpan(SqlDataReader reader, string column)
+    {
+        return reader.GetTimeSpan(reader.GetOrdinal(column));
+    }
+
     public static int? GetNullableInt(SqlDataReader reader, string column)
     {
         var ordinal = reader.GetOrdinal(column);
