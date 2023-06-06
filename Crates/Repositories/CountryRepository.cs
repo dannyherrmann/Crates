@@ -39,4 +39,37 @@ public class CountryRepository : BaseRepository, ICountryRepository
         }
     }
 
+    public void Add(Country country)
+    {
+        using (var conn = Connection)
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"INSERT INTO [Countries]
+                                        (name)
+                                    OUTPUT inserted.id
+                                    VALUES  (@name)";
+
+                DbUtils.AddParameter(cmd, "@name", country.Name);
+
+                country.Id = (int)cmd.ExecuteScalar();
+            }
+        }
+    }
+
+    public void Delete(int id)
+    {
+        using (var conn = Connection)
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "DELETE FROM [Countries] WHERE id = @id";
+                DbUtils.AddParameter(cmd, "@id", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
 }

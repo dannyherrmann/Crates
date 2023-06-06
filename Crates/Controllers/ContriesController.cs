@@ -21,4 +21,18 @@ public class CountriesController : Controller
     {
         return Ok(_countryRepo.GetAllCountries());
     }
+
+    [HttpPost]
+    public IActionResult Add(Country country)
+    {
+        _countryRepo.Add(country);
+        return Created("/country/" + country.Id, country);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _countryRepo.Delete(id);
+        return NoContent();
+    }
 }
