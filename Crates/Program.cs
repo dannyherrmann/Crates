@@ -20,6 +20,7 @@ builder.Services.AddTransient<IAlbumStyleRepository, AlbumStyleRepository>();
 builder.Services.AddTransient<ICountryRepository, CountryRepository>();
 builder.Services.AddTransient<ILabelRepository, LabelRepository>();
 builder.Services.AddTransient<ISpeedRepository, SpeedRepository>();
+builder.Services.AddTransient<ISizeRepository, SizeRepository>();
 
 var app = builder.Build();
 
