@@ -21,6 +21,7 @@ builder.Services.AddTransient<ICountryRepository, CountryRepository>();
 builder.Services.AddTransient<ILabelRepository, LabelRepository>();
 builder.Services.AddTransient<ISpeedRepository, SpeedRepository>();
 builder.Services.AddTransient<ISizeRepository, SizeRepository>();
+builder.Services.AddTransient<ICrateTrackRepository, CrateTrackRepository>();
 
 var app = builder.Build();
 
