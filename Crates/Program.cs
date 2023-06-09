@@ -23,6 +23,7 @@ builder.Services.AddTransient<ISpeedRepository, SpeedRepository>();
 builder.Services.AddTransient<ISizeRepository, SizeRepository>();
 builder.Services.AddTransient<ICrateTrackRepository, CrateTrackRepository>();
 builder.Services.AddTransient<IUserCrateRepository, UserCrateRepository>();
+builder.Services.AddTransient<IUserDigRepository, UserDigRepository>();
 
 var app = builder.Build();
 
