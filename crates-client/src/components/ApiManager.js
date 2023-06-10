@@ -8,7 +8,7 @@ export const AddUser = async (userObj) => {
         },
         body: JSON.stringify(userObj)
     }
-    await fetch(`${apiUrl}/Users`)
+    await fetch(`${apiUrl}/Users`, options)
 }
 
 export const FetchUserByFirebaseId = async (uid) => {

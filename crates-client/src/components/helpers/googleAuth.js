@@ -15,7 +15,7 @@ import { AddUser, FetchUserByFirebaseId } from "../ApiManager";
         const auth = getAuth()
         signInWithPopup(auth, provider)
           .then(async (userCredential) => {
-            let dbUser = await FetchUserByFirebaseId(userCredential.uid)
+            let dbUser = await FetchUserByFirebaseId(userCredential.user.uid)
             if (dbUser.title === "Not Found") {
               dbUser = {
                 name: userCredential.user.displayName,
