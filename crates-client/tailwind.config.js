@@ -4,8 +4,22 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'crate-yellow': '#F6EB80',
+        'crate-blue': '#000AFF',
+        'hover-blue': '#4048FD',
+      },
+      fontFamily: {
+        'Space-Mono': ['Space Mono', 'mono'],
+      },
+      backgroundImage: {
+        'disco': "url('/src/components/images/disco-ball.jpg')"
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }
 

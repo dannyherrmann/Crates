@@ -10,7 +10,7 @@ import { AddUser } from "../ApiManager";
   
   export const emailAuth = {
     // Register New User
-    register: function(userObj) {
+    register: function(userObj, navigate) {
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, userObj.email, userObj.password)
         .then(async (userCredential) => {
@@ -26,6 +26,7 @@ import { AddUser } from "../ApiManager";
                 type: "email"
               }
               localStorage.setItem("crate_user", JSON.stringify(userAuth));
+              navigate("/")
               //add to DB
               const dbUser = {
                 name: userCredential.user.displayName,
