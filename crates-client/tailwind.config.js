@@ -1,3 +1,5 @@
+
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -12,9 +14,6 @@ module.exports = {
       },
       fontFamily: {
         'Space-Mono': ['Space Mono', 'mono'],
-      },
-      backgroundImage: {
-        'disco': "url('/src/components/images/disco-ball.jpg')"
       },
     },
   },

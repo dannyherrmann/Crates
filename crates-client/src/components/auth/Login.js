@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import mainLogo from '../images/crates-logo.png'
 import GoogleButton from "react-google-button";
 import { Link } from "react-router-dom";
-import disco from '../images/disco-ball.jpg'
 
 export const Login = () => {
 
