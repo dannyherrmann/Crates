@@ -79,7 +79,7 @@ export const Login = () => {
               <button
                 onClick={(e) => onSubmitLoginEmail(e)}
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-crate-blue px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-hover-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
@@ -97,7 +97,7 @@ export const Login = () => {
                 </div>
               </div>
             </div>
-
+          
           <p className="text-center text-sm leading-6 text-white">
             New to Crates?{' '}
             <Link to={"/register"} className="font-semibold text-white">Create an Account</Link>
