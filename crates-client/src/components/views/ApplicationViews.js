@@ -3,6 +3,7 @@ import { Home } from "../home/Home"
 import { Records } from "../records/Records";
 import { Crates } from "../crates/Crates";
 import { Digs } from "../digs/Digs";
+import { RecordDetail } from "../records/RecordDetail";
 
 export const ApplicationViews = () => {
     return (
@@ -18,6 +19,7 @@ export const ApplicationViews = () => {
             <Route path="/myRecords" element={ <Records /> } />
             <Route path="/myCrates" element={ <Crates /> } />
             <Route path="/myDigs" element={ <Digs /> } />
+            <Route path="/albums/:albumId" element={<RecordDetail />} />
         </Routes>
     )
 }

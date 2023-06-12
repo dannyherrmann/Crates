@@ -22,3 +22,9 @@ export const FetchUserRecords = async (userId) => {
     const records = await response.json()
     return records
 }
+
+export const FetchAlbum = async (albumId) => {
+    const response = await fetch(`${apiUrl}/albums/${albumId}`)
+    const album = await response.json()
+    return album
+}
