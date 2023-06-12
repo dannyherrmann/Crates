@@ -16,3 +16,9 @@ export const FetchUserByFirebaseId = async (uid) => {
     const user = await response.json()
     return user
 }
+
+export const FetchUserRecords = async (userId) => {
+    const response = await fetch(`${apiUrl}/userAlbums/${userId}`)
+    const records = await response.json()
+    return records
+}

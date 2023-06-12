@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { emailAuth } from "../helpers/emailAuth";
-import { googleAuth } from "../helpers/googleAuth";
 import { useNavigate } from "react-router-dom";
 import mainLogo from '../images/crates-logo.png'
 import GoogleButton from "react-google-button";
 import { Link } from "react-router-dom";
+import { AddUser, FetchUserByFirebaseId } from "../ApiManager";
+import {
+    getAuth,
+    signInWithPopup,
+    GoogleAuthProvider,
+    createUserWithEmailAndPassword
+} from "firebase/auth";
 
 export const Register = () => {
 
@@ -22,13 +27,53 @@ export const Register = () => {
         setUser(copy)
     }
 
-    const onSubmitLoginEmail = async (e) => {
-        e.preventDefault()
-        emailAuth.register(user, navigate)
+    const handleLocalStorage = async (uid, loginType) => {
+        const user = await FetchUserByFirebaseId(uid)
+        localStorage.setItem(
+            "crate_user",
+            JSON.stringify({
+                id: user.id,
+                email: user.email,
+                uid: user.uid,
+                type: loginType
+            })
+        )
+        navigate("/")
     }
 
-    const onSubmitLoginGoogle = async () => {
-        googleAuth.signInRegister(navigate)
+    const onSubmitLoginEmail = async (e) => {
+        e.preventDefault()
+        const auth = getAuth()
+        const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password)
+        let dbUser = await FetchUserByFirebaseId(userCredential.user.uid)
+        if (dbUser.title === "Not Found") {
+            dbUser = {
+                name: user.fullName,
+                email: userCredential.user.email,
+                uid: userCredential.user.uid,
+                photo: null
+            }
+            await AddUser(dbUser)
+        }
+        handleLocalStorage(userCredential.user.uid, 'email')
+    }
+
+    const onSubmitLoginGoogle = async (e) => {
+        e.preventDefault()
+        const provider = new GoogleAuthProvider()
+        const auth = getAuth()
+        const userCredential = await signInWithPopup(auth, provider)
+        let dbUser = await FetchUserByFirebaseId(userCredential.user.uid)
+        if (dbUser.title === "Not Found") {
+            dbUser = {
+                name: userCredential.user.displayName,
+                email: userCredential.user.email,
+                uid: userCredential.user.uid,
+                photo: null
+            }
+            await AddUser(dbUser)
+        }
+        handleLocalStorage(userCredential.user.uid, 'google')
     }
 
     return (

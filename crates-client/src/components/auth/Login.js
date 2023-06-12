@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { emailAuth } from "../helpers/emailAuth";
-import { googleAuth } from "../helpers/googleAuth";
 import { useNavigate } from "react-router-dom";
 import mainLogo from '../images/crates-logo.png'
 import GoogleButton from "react-google-button";
 import { Link } from "react-router-dom";
+import { FetchUserByFirebaseId } from "../ApiManager";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 export const Login = () => {
 
@@ -21,13 +26,33 @@ export const Login = () => {
     setLogin(copy)
   }
 
-  const onSubmitLoginEmail = async (e) => {
-    e.preventDefault()
-    emailAuth.signIn(login, navigate)
+  const handleLocalStorage = async (uid, loginType) => {
+    const user = await FetchUserByFirebaseId(uid)
+    localStorage.setItem(
+      "crate_user",
+      JSON.stringify({
+        id: user.id,
+        email: user.email,
+        uid: user.uid,
+        type: loginType
+      })
+    )
+    navigate("/")
   }
 
-  const onSubmitLoginGoogle = async () => {
-    googleAuth.signInRegister(navigate)
+  const onSubmitLoginEmail = async (e) => {
+    e.preventDefault()
+    const auth = getAuth()
+    const userCredential = await signInWithEmailAndPassword(auth, login.email, login.password)
+    handleLocalStorage(userCredential.user.uid, 'email')
+  }
+
+  const onSubmitLoginGoogle = async (e) => {
+    e.preventDefault()
+    const provider = new GoogleAuthProvider()
+    const auth = getAuth()
+    const userCredential = await signInWithPopup(auth, provider)
+    handleLocalStorage(userCredential.user.uid, 'google')
   }
 
   return (
@@ -97,7 +122,7 @@ export const Login = () => {
                 </div>
               </div>
             </div>
-          
+
           <p className="text-center text-sm leading-6 text-white">
             New to Crates?{' '}
             <Link to={"/register"} className="font-semibold text-white">Create an Account</Link>
