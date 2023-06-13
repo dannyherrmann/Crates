@@ -28,3 +28,9 @@ export const FetchAlbum = async (albumId) => {
     const album = await response.json()
     return album
 }
+
+export const FetchAlbumTracks = async (albumId) => {
+    const response = await fetch(`${apiUrl}/tracks/album/${albumId}`)
+    const tracks = await response.json()
+    return tracks
+}
