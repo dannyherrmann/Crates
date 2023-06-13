@@ -4,6 +4,7 @@ import { Records } from "../records/Records";
 import { Crates } from "../crates/Crates";
 import { Digs } from "../digs/Digs";
 import { RecordDetail } from "../records/RecordDetail";
+import { RecordForm } from "../records/RecordForm";
 
 export const ApplicationViews = () => {
     return (
@@ -20,6 +21,7 @@ export const ApplicationViews = () => {
             <Route path="/myCrates" element={ <Crates /> } />
             <Route path="/myDigs" element={ <Digs /> } />
             <Route path="/albums/:albumId" element={<RecordDetail />} />
+            <Route path="/newAlbum" element={<RecordForm />} />
         </Routes>
     )
 }

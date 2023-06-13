@@ -53,6 +53,9 @@ export const RecordDetail = () => {
                         <div className="flex">
                             <div className="mt-7 p-3 bg-black font-Space-Mono text-crate-yellow">
                                 <ul role="list" className="list-none space-y-2 text-sm">
+                                    <li key="catalogNumber">
+                                        <span><b>Catalog Number:</b> {record.catalogNumber}</span>
+                                    </li>
                                     <li key='label'>
                                         <span><b>Label:</b> {record.label?.name}</span>
                                     </li>
