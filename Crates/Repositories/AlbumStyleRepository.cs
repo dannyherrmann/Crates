@@ -56,7 +56,7 @@ public class AlbumStyleRepository : BaseRepository, IAlbumStyleRepository
                                             @styleId)";
 
                 DbUtils.AddParameter(cmd, "@albumId", albumStyle.AlbumId);
-                DbUtils.AddParameter(cmd, "@styleId", albumStyle.AlbumId);
+                DbUtils.AddParameter(cmd, "@styleId", albumStyle.StyleId);
 
                 albumStyle.Id = (int)cmd.ExecuteScalar();
             }

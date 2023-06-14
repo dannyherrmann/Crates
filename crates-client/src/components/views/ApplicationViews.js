@@ -5,6 +5,7 @@ import { Crates } from "../crates/Crates";
 import { Digs } from "../digs/Digs";
 import { RecordDetail } from "../records/RecordDetail";
 import { RecordForm } from "../records/RecordForm";
+import { ArtistForm } from "../artists/ArtistForm";
 
 export const ApplicationViews = () => {
     return (
@@ -22,6 +23,7 @@ export const ApplicationViews = () => {
             <Route path="/myDigs" element={ <Digs /> } />
             <Route path="/albums/:albumId" element={<RecordDetail />} />
             <Route path="/newAlbum" element={<RecordForm />} />
+            <Route path="/newArtist" element={<ArtistForm />} />
         </Routes>
     )
 }
