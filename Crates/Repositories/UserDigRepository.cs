@@ -49,7 +49,7 @@ public class UserDigRepository : BaseRepository, IUserDigRepository
                                 JOIN Countries co ON al.countryId = co.id
                                 JOIN Sizes si ON al.sizeId = si.id
                                 JOIN Speeds sp ON al.speedId = sp.id
-                            WHERE ud.userId = 1";
+                            WHERE ud.userId = @userId";
 
                 if (!string.IsNullOrEmpty(genres))
                 {

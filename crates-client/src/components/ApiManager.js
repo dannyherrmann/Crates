@@ -25,6 +25,12 @@ export const FetchUserRecords = async (userId) => {
     return records
 }
 
+export const FetchUserDigs = async (userId) => {
+    const response = await fetch(`${apiUrl}/userDigs/${userId}`)
+    const records = await response.json()
+    return records
+}
+
 export const FetchAlbum = async (albumId) => {
     const response = await fetch(`${apiUrl}/albums/${albumId}`)
     const album = await response.json()
@@ -134,4 +140,15 @@ export const AddArtist = async (artistObj) => {
         body: JSON.stringify(artistObj)
     }
     await fetch(`${apiUrl}/artists`, options)
+}
+
+export const AddUserAlbum = async (userAlbumObj) => {
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userAlbumObj)
+    }
+    await fetch(`${apiUrl}/userAlbums`, options)
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { FetchAlbum, FetchAlbumTracks } from "../ApiManager"
+import { useParams, useNavigate } from "react-router-dom"
+import { FetchAlbum, FetchAlbumTracks, AddUserAlbum } from "../ApiManager"
 import { PlusSmallIcon } from '@heroicons/react/20/solid'
 import { PlusIcon } from '@heroicons/react/20/solid'
 
@@ -8,6 +8,11 @@ export const RecordDetail = () => {
     const { albumId } = useParams()
     const [record, setRecord] = useState([])
     const [tracks, setTracks] = useState([])
+
+    const crateUser = localStorage.getItem("crate_user")
+    const currentUser = JSON.parse(crateUser)
+
+    const navigate = useNavigate()
 
     const fetchAlbum = async () => {
         const album = await FetchAlbum(albumId)
@@ -24,6 +29,19 @@ export const RecordDetail = () => {
         fetchTracks()
     }, [albumId])
 
+    const addToCollection = (e) => {
+        e.preventDefault()
+
+        const userAlbumToSendToApi = {
+            userId: currentUser.id,
+            albumId: albumId,
+            dateAdded: new Date()
+        }
+
+        AddUserAlbum(userAlbumToSendToApi)
+
+        navigate("/myRecords")
+    }
 
 
     return (
@@ -86,6 +104,7 @@ export const RecordDetail = () => {
                             </button>
                             <button
                                 type="button"
+                                onClick={(e) => addToCollection(e)}
                                 className="rounded-md bg-crate-yellow px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 add to collection
