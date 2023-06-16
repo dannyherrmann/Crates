@@ -112,20 +112,19 @@ export const Login = () => {
           </form>
 
           <div className="mt-6 grid grid-cols-1 gap-1">
-              <div>
-                <div className="relative flex justify-center text-sm">
-                    <GoogleButton 
-                    type="light"
-                    onClick={onSubmitLoginGoogle}
-                    className="ml-19"
-                    />
-                </div>
+            <div>
+              <div className="relative flex justify-center text-sm">
+                <GoogleButton
+                  type="light"
+                  onClick={onSubmitLoginGoogle}
+                  className="ml-19"
+                />
               </div>
             </div>
-
-          <p className="text-center text-sm leading-6 text-white">
+          </div>
+          <p className="text-center text-sm leading-6 text-white font-bold">
             New to Crates?{' '}
-            <Link to={"/register"} className="font-semibold text-white">Create an Account</Link>
+            <Link to={"/register"} className="text-white underline font-bold">Create an Account</Link>
           </p>
         </div>
       </div>

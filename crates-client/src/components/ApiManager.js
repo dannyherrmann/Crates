@@ -152,3 +152,51 @@ export const AddUserAlbum = async (userAlbumObj) => {
     }
     await fetch(`${apiUrl}/userAlbums`, options)
 }
+
+export const FetchRecords = async (pageNumber, pageSize, sortOrder, searchCriterion) => {
+    const response = await fetch(`${apiUrl}/albums?pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${sortOrder}&searchCriterion=${searchCriterion}`)
+    const records = await response.json()
+    return records
+}
+
+export const FetchAllRecords = async () => {
+    const response = await fetch(`${apiUrl}/albums`)
+    const records = await response.json()
+    return records
+}
+
+export const FetchPagedRecords = async (pageNumber, pageSize, sortOrder) => {
+    const response = await fetch(`${apiUrl}/albums?pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${sortOrder}`)
+    const records = await response.json()
+    return records
+}
+
+export const FetchAllRecordsSearch = async (searchCriterion) => {
+    const response = await fetch(`${apiUrl}/albums?searchCriterion=${searchCriterion}`)
+    const records = await response.json()
+    return records
+}
+
+export const FetchRecordsByGenre = async (genres) => {
+    const response = await fetch(`${apiUrl}/albums?genres=${genres}`)
+    const records = await response.json()
+    return records
+}
+
+export const FetchPagedRecordsGenre = async (pageNumber, pageSize, sortOrder, genres) => {
+    const response = await fetch(`${apiUrl}/albums?pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${sortOrder}&genres=${genres}`)
+    const records = await response.json()
+    return records
+}
+
+export const FetchRecordsByStyle = async (styles) => {
+    const response = await fetch(`${apiUrl}/albums?styles=${styles}`)
+    const records = await response.json()
+    return records
+}
+
+export const FetchPagedRecordsByStyle = async (pageNumber, pageSize, sortOrder, styles) => {
+    const response = await fetch(`${apiUrl}/albums?pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${sortOrder}&styles=${styles}`)
+    const records = await response.json()
+    return records
+}

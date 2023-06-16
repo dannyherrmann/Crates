@@ -4,10 +4,14 @@ import myRecords from "../images/my-records.png"
 import { Record } from "./Record"
 import { PlusSmallIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from "react-router-dom"
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import ReactPaginate from "react-paginate"
 
 export const Records = () => {
 
   const [records, setRecords] = useState([])
+  const [pageCount, setPageCount] = useState([])
+
 
   const crateUser = localStorage.getItem("crate_user")
   const currentUser = JSON.parse(crateUser)
@@ -23,13 +27,18 @@ export const Records = () => {
     fetchRecords()
   }, [])
 
+  const handlePageClick = async (data) => {
+    // let currentPage = data.selected + 1
+    // const records = await FetchRecords(currentPage, limit, 0, searchCriterion)
+    // setRecords(records)
+}
+
   return (
     <div>
-
       <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center gap-6 sm:flex-nowrap pr-2 pt-6">
-          
-            <img className="w-100 h-20 object-cover" src={myRecords} />
+
+          <img className="w-20 h-20 object-cover" src={myRecords} />
 
           <a
             onClick={() => navigate('/newAlbum')}
@@ -52,6 +61,26 @@ export const Records = () => {
           })}
         </div>
       </div>
+      {/* PAGINATION */}
+      <ReactPaginate
+        previousLabel={"previous"}
+        nextLabel={"next"}
+        breakLabel={"..."}
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageClick}
+        containerClassName={"pagination justify-content-center"}
+        pageClassName={"page-item"}
+        pageLinkClassName={"page-link"}
+        previousClassName={"page-item"}
+        previousLinkClassName={"page-link"}
+        nextClassName={"page-item"}
+        nextLinkClassName={"page-link"}
+        breakClassName={"page-item"}
+        breakLinkClassName={"page-link"}
+        activeClassName={"active"}
+      />
     </div>
   )
 }

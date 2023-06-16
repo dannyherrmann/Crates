@@ -7,6 +7,8 @@ import { RecordDetail } from "../records/RecordDetail";
 import { RecordForm } from "../records/RecordForm";
 import { ArtistForm } from "../artists/ArtistForm";
 import { CrateForm } from "../crates/CrateForm";
+import { SearchResults } from "../../search/SearchResults";
+import { AllRecords } from "../records/AllRecords";
 
 export const ApplicationViews = () => {
     return (
@@ -26,6 +28,8 @@ export const ApplicationViews = () => {
             <Route path="/newAlbum" element={<RecordForm />} />
             <Route path="/newArtist" element={<ArtistForm />} />
             <Route path="/newCrate" element={<CrateForm />} />
+            <Route path="/records/search/:searchCriterion" element={<SearchResults />} />
+            <Route path="/allRecords" element={<AllRecords />} />
         </Routes>
     )
 }

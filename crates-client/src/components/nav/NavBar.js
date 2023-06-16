@@ -4,7 +4,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import cratesFont from '../images/crates-font.png'
 import { logout } from "../helpers/logout"
-import { useNavigate } from 'react-router-dom'
+import { Route, useNavigate } from 'react-router-dom'
 import { FetchUserByFirebaseId } from '../ApiManager'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
@@ -15,8 +15,32 @@ export const NavBar = () => {
     const crateUserObject = JSON.parse(crateUser);
 
     const [avatar, setAvatar] = useState({})
+    const [searchTerms, setSearchTerms] = useState("")
+    const [searchDropdown, setSearchDropdown] = useState(false)
 
     const navigate = useNavigate();
+
+    const submitSearch = () => {
+        if (searchTerms) {
+            navigate(`records/search/${searchTerms}`)
+        }
+    }
+
+    useEffect(() => {
+        if (searchTerms) {
+            setSearchDropdown(true)
+        } else {
+            setSearchDropdown(false)
+        }
+    }, [searchTerms])
+
+    document.body.addEventListener("click", () => {
+        if (document.activeElement.id !== "search" || !searchTerms) {
+            setSearchDropdown(false)
+        } else {
+            setSearchDropdown(true)
+        }
+    })
 
     const fetchUser = async () => {
         const user = await FetchUserByFirebaseId(crateUserObject.uid)
@@ -26,6 +50,8 @@ export const NavBar = () => {
     useEffect(() => {
         fetchUser()
     }, [])
+
+
 
     const user = {
         name: 'Chelsea Hagon',
@@ -88,8 +114,34 @@ export const NavBar = () => {
                                                     className="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-crate-yellow sm:text-sm sm:leading-6"
                                                     placeholder="search for artist, albums ..."
                                                     type="search"
+                                                    onChange={(evt) => setSearchTerms(evt.target.value)}
+                                                    onKeyDown={(evt) => {
+                                                        if (evt.key === "Enter") {
+                                                            evt.preventDefault()
+                                                            submitSearch()
+                                                            setSearchDropdown(false)
+                                                        }
+                                                    }}
                                                 />
                                             </div>
+                                            {
+                                                !searchDropdown
+                                                    ? ""
+                                                    : <div className='absolute z-50 w-full sm:max-w-2xl bg-white'>
+                                                        <div className="pl-10 text-sm font-light italic text-gray-600 border-b border-gray-200">searching "{searchTerms}" in records</div>
+                                                        <div
+                                                            onClick={() => {
+                                                                submitSearch()
+                                                                setSearchDropdown(false)
+                                                                
+                                                            }}
+                                                            className="pl-10 font-semibold text-lg text-gray-900 hover:bg-gray-300 hover:cursor-pointer"
+                                                        >
+                                                            <span>Search "{searchTerms}" in </span>
+                                                            <span className="px-1.5 bg-gray-200 text-gray-800 rounded">Crates</span>
+                                                        </div>
+                                                    </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
