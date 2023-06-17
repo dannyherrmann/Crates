@@ -7,7 +7,7 @@ public class UserCrateRepository : BaseRepository, IUserCrateRepository
 {
     public UserCrateRepository (IConfiguration configuration) : base(configuration) { }
 
-    public List<UserCrate> GetAllUserCrates()
+    public List<UserCrate> GetAllUserCrates(int userId)
     {
         using (var conn = Connection)
         {
@@ -18,7 +18,10 @@ public class UserCrateRepository : BaseRepository, IUserCrateRepository
                                             name,
                                             userId,
                                             dateCreated
-                                    FROM UserCrates";
+                                    FROM UserCrates
+                                    WHERE userId = @userId";
+
+                DbUtils.AddParameter(cmd, "@userId", userId);
 
                 var reader = cmd.ExecuteReader();
 

@@ -16,10 +16,10 @@ public class CrateTracksController : Controller
         _crateTrackRepo = crateTrackRepository;
     }
 
-    [HttpGet]
-    public IActionResult GetAllCrateTracks()
+    [HttpGet("{crateId}")]
+    public IActionResult GetAllCrateTracks(int crateId)
     {
-        return Ok(_crateTrackRepo.GetAllCrateTracks());
+        return Ok(_crateTrackRepo.GetAllCrateTracks(crateId));
     }
 
     [HttpPost]

@@ -2,8 +2,8 @@ import { useState, useEffect } from "react"
 import {
     FetchRecords,
     FetchAllRecordsSearch
-} from "../components/ApiManager"
-import { SearchRecord } from "../components/records/SearchRecord"
+} from "../ApiManager"
+import { SearchRecord } from "../records/SearchRecord"
 import { useNavigate, useParams } from "react-router-dom"
 import ReactPaginate from "react-paginate"
 

@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 export const Record = ({ record }) => {
     const navigate = useNavigate()
 
-    console.log('albumId', record.album.id)
-
     return (
         <section onClick={() => navigate(`/albums/${record.album.id}`)} key={`userAlbum--${record.id}`}>
             <div key={record.id} className="group relative">

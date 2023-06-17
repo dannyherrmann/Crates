@@ -7,7 +7,7 @@ public class CrateTrackRepository : BaseRepository, ICrateTrackRepository
 {
     public CrateTrackRepository(IConfiguration configuration) : base(configuration) { }
 
-    public List<CrateTrack> GetAllCrateTracks()
+    public List<CrateTrack> GetAllCrateTracks(int crateId)
     {
         using (var conn = Connection)
         {
@@ -30,7 +30,10 @@ public class CrateTrackRepository : BaseRepository, ICrateTrackRepository
                                     FROM CrateTracks ct
                                     JOIN Tracks t on ct.trackId = t.id
                                     JOIN Albums al on t.albumId = al.id
-                                    JOIN Artists ar on al.artistId = ar.id";
+                                    JOIN Artists ar on al.artistId = ar.id
+                                    WHERE crateId = @crateId";
+
+                DbUtils.AddParameter(cmd, "@crateId", crateId);
 
                 var reader = cmd.ExecuteReader();
 
@@ -80,10 +83,14 @@ public class CrateTrackRepository : BaseRepository, ICrateTrackRepository
                                         trackId,
                                         bpm)
                                     OUTPUT inserted.id
-                                    SELECT @crateId, @trackId, (SELECT bpm FROM Tracks WHERE id = @trackId)";
+                                    VALUES
+                                        (@crateId,
+                                        @trackId,
+                                        @bpm)";
                 
                 DbUtils.AddParameter(cmd, "@crateId", crateTrack.CrateId);
                 DbUtils.AddParameter(cmd, "@trackId", crateTrack.TrackId);
+                DbUtils.AddParameter(cmd, "@bpm", crateTrack.Bpm);
 
                 crateTrack.Id = (int)cmd.ExecuteScalar();
             }

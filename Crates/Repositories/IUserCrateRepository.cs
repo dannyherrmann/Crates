@@ -4,7 +4,7 @@ namespace Crates.Repositories
 {
     public interface IUserCrateRepository
     {
-        List<UserCrate> GetAllUserCrates();
+        List<UserCrate> GetAllUserCrates(int userId);
         UserCrate GetById(int id);
         void Add(UserCrate userCrate);
         void Update(UserCrate userCrate);

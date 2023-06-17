@@ -4,7 +4,7 @@ namespace Crates.Repositories
 {
     public interface ICrateTrackRepository
     {
-        List<CrateTrack> GetAllCrateTracks(); 
+        List<CrateTrack> GetAllCrateTracks(int crateId); 
         void Add(CrateTrack crateTrack);
         void Delete(int id);
     }

@@ -16,13 +16,13 @@ public class UserCratesController : Controller
         _userCrateRepo = userCrateRepository;
     }
 
-    [HttpGet]
-    public IActionResult GetAllUserCrates()
+    [HttpGet("{userId}")]
+    public IActionResult GetAllUserCrates(int userId)
     {
-        return Ok(_userCrateRepo.GetAllUserCrates());
+        return Ok(_userCrateRepo.GetAllUserCrates(userId));
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("id/{id}")]
     public IActionResult GetById(int id)
     {
         var userCrate = _userCrateRepo.GetById(id);

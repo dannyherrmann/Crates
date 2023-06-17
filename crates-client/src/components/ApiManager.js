@@ -205,3 +205,51 @@ export const FetchDecades = async () => {
     const decades = await response.json()
     return decades
 }
+
+export const FetchUserCrates = async (userId) => {
+    const response = await fetch(`${apiUrl}/userCrates/${userId}`)
+    const crates = await response.json()
+    return crates
+}
+
+export const FetchCrateTracks = async (crateId) => {
+    const response = await fetch(`${apiUrl}/crateTracks/${crateId}`)
+    const crateTracks = await response.json()
+    return crateTracks
+}
+
+export const FetchUserCrateById = async (crateId) => {
+    const response = await fetch(`${apiUrl}/userCrates/id/${crateId}`)
+    const userCrate = await response.json()
+    return userCrate
+}
+
+export const FetchTracksByUser = async (userId) => {
+    const response = await fetch(`${apiUrl}/tracks/user/${userId}`)
+    const tracks = await response.json()
+    return tracks
+}
+
+export const AddCrateTrack = async (crateTrackObj) => {
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(crateTrackObj)
+    }
+    await fetch(`${apiUrl}/crateTracks`, options)
+}
+
+export const AddUserCrate = async (userCrateObj) => {
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userCrateObj)
+    }
+    const response = await fetch(`${apiUrl}/userCrates`, options)
+    const jsonData = await response.json()
+    return jsonData
+}
