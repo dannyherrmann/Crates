@@ -253,3 +253,17 @@ export const AddUserCrate = async (userCrateObj) => {
     const jsonData = await response.json()
     return jsonData
 }
+
+export const DeleteUserAlbum = async (userAlbumId) => {
+    const options = {
+        method: "DELETE",
+    }
+    await fetch(`${apiUrl}/userAlbums/${userAlbumId}`, options)
+}
+
+export const DeleteUserDig = async (userDigId) => {
+    const options = {
+        method: "DELETE",
+    }
+    await fetch(`${apiUrl}/userDigs/${userDigId}`, options)
+}

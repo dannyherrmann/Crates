@@ -1,13 +1,25 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { FetchAlbum, FetchAlbumTracks, AddUserAlbum, AddUserDig } from "../ApiManager"
-import { PlusSmallIcon } from '@heroicons/react/20/solid'
-import { PlusIcon } from '@heroicons/react/20/solid'
+import {
+    FetchAlbum,
+    FetchAlbumTracks,
+    AddUserAlbum,
+    AddUserDig,
+    FetchUserRecords,
+    FetchUserDigs,
+    DeleteUserAlbum,
+    DeleteUserDig
+}
+    from "../ApiManager"
 
 export const RecordDetail = () => {
     const { albumId } = useParams()
     const [record, setRecord] = useState([])
     const [tracks, setTracks] = useState([])
+    const [userAlbums, setUserAlbums] = useState([])
+    const [userDigs, setUserDigs] = useState([])
+    const [userAlbum, setUserAlbum] = useState(null)
+    const [userDig, setUserDig] = useState(null)
 
     const crateUser = localStorage.getItem("crate_user")
     const currentUser = JSON.parse(crateUser)
@@ -24,12 +36,52 @@ export const RecordDetail = () => {
         setTracks(tracks)
     }
 
+    const fetchUserAlbums = async () => {
+        const albums = await FetchUserRecords(currentUser.id)
+        setUserAlbums(albums)
+        findAlbum(albums)
+    }
+
+    const findAlbum = (albums) => {
+        const foundAlbum = albums.find((userAlbum) => userAlbum.albumId === parseInt(albumId))
+        setUserAlbum(foundAlbum)
+    }
+
+    const fetchUserDigs = async () => {
+        const userDigs = await FetchUserDigs(currentUser.id)
+        setUserDigs(userDigs)
+        findDig(userDigs)
+    }
+
+    const findDig = (digs) => {
+        const foundDig = digs.find((userDig) => userDig.albumId === parseInt(albumId))
+        setUserDig(foundDig)
+    }
+
     useEffect(() => {
         fetchAlbum()
         fetchTracks()
+        fetchUserAlbums()
+        fetchUserDigs()
     }, [albumId])
 
-    const addToCollection = (e) => {
+    const inCollection = () => {
+        if (userAlbum != undefined) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    const inDigList = () => {
+        if (userDig != undefined) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    const addToCollection = async (e) => {
         e.preventDefault()
 
         const userAlbumToSendToApi = {
@@ -38,12 +90,22 @@ export const RecordDetail = () => {
             dateAdded: new Date()
         }
 
-        AddUserAlbum(userAlbumToSendToApi)
+        await AddUserAlbum(userAlbumToSendToApi)
+
+        if (userDig != undefined) {
+            await DeleteUserDig(userDig.id)
+        }
 
         navigate("/myRecords")
     }
 
-    const addToDigs = (e) => {
+    const deleteFromCollection = async (e) => {
+        e.preventDefault()
+        await DeleteUserAlbum(userAlbum.id)
+        navigate("/myRecords")
+    }
+
+    const addToDigs = async (e) => {
         e.preventDefault()
 
         const userDigToSendToApi = {
@@ -52,8 +114,14 @@ export const RecordDetail = () => {
             dateAdded: new Date()
         }
 
-        AddUserDig(userDigToSendToApi)
+        await AddUserDig(userDigToSendToApi)
 
+        navigate("/myDigs")
+    }
+
+    const deleteFromDigs = async (e) => {
+        e.preventDefault()
+        await DeleteUserDig(userDig.id)
         navigate("/myDigs")
     }
 
@@ -116,20 +184,52 @@ export const RecordDetail = () => {
                             >
                                 edit album
                             </button> */}
-                            <button
-                                type="button"
-                                onClick={(e) => addToCollection(e)}
-                                className="rounded-md bg-crate-yellow px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            >
-                                add to collection
-                            </button>
-                            <button
-                                type="button"
-                                onClick={(e) => addToDigs(e)}
-                                className="ml-1 rounded-md bg-crate-yellow px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            >
-                                add to digs
-                            </button>
+                            {
+                                inCollection() ? (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={(e) => deleteFromCollection(e)}
+                                            className="rounded-md bg-red-400 px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                        >
+                                            remove from collection
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={(e) => addToCollection(e)}
+                                            className="rounded-md bg-crate-yellow px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                        >
+                                            add to collection
+                                        </button>
+                                    </>
+                                )
+                            }
+                            {
+                                inDigList() ? (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={(e) => deleteFromDigs(e)}
+                                            className="ml-1 rounded-md bg-red-400 px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                        >
+                                            remove from digs
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={(e) => addToDigs(e)}
+                                            className="ml-1 rounded-md bg-crate-yellow px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                        >
+                                            add to digs
+                                        </button>
+                                    </>
+                                )
+                            }
                         </div>
 
                     </div>
