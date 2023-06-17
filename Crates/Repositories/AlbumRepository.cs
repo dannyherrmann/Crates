@@ -41,7 +41,9 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
                                 si.name AS sizeName,
                                 sp.id AS speedTableId,
                                 sp.name AS speedName,
+                                (SELECT STRING_AGG(CAST(g.id AS VARCHAR), ', ') FROM AlbumGenres ag JOIN Genres g ON ag.genreId = g.id WHERE ag.albumId = al.id) AS genreIds,
                                 (SELECT STRING_AGG(g.name, ', ') FROM AlbumGenres ag JOIN Genres g ON ag.genreId = g.id WHERE ag.albumId = al.id) AS genres,
+                                (SELECT STRING_AGG(CAST(s.id AS VARCHAR), ', ') FROM AlbumStyles asl JOIN Styles s ON asl.styleId = s.id WHERE asl.albumId = al.id) AS styleIds,
                                 (SELECT STRING_AGG(s.name, ', ') FROM AlbumStyles asl JOIN Styles s ON asl.styleId = s.id WHERE asl.albumId = al.id) AS styles
                             FROM Albums al
                             JOIN Artists ar ON al.artistId = ar.id
@@ -179,7 +181,9 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
                         LabelId = labelId,
                         SizeId = sizeId,
                         SpeedId = speedId,
+                        GenreIds = DbUtils.GetString(reader, "genreIds"),
                         Genres = DbUtils.GetString(reader, "genres"),
+                        StyleIds = DbUtils.GetString(reader, "styleIds"),
                         Styles = DbUtils.GetString(reader, "styles"),
                         Artist = new Artist()
                         {
@@ -230,12 +234,10 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
                                         si.name AS sizeName,
                                         sp.id AS speedTableId,
                                         sp.name AS speedName,
-                                        (SELECT STRING_AGG(g.name, ', ')
-                                        FROM AlbumGenres ag JOIN Genres g ON ag.genreId = g.id
-                                        WHERE ag.albumId = al.id) AS genres,
-                                        (SELECT STRING_AGG(s.name, ', ')
-                                        FROM AlbumStyles asl JOIN Styles s ON asl.styleId = s.id
-                                        WHERE asl.albumId = al.id) AS styles
+                                        (SELECT STRING_AGG(CAST(g.id AS VARCHAR), ', ') FROM AlbumGenres ag JOIN Genres g ON ag.genreId = g.id WHERE ag.albumId = al.id) AS genreIds,
+                                        (SELECT STRING_AGG(g.name, ', ') FROM AlbumGenres ag JOIN Genres g ON ag.genreId = g.id WHERE ag.albumId = al.id) AS genres,
+                                        (SELECT STRING_AGG(CAST(s.id AS VARCHAR), ', ') FROM AlbumStyles asl JOIN Styles s ON asl.styleId = s.id WHERE asl.albumId = al.id) AS styleIds,
+                                        (SELECT STRING_AGG(s.name, ', ') FROM AlbumStyles asl JOIN Styles s ON asl.styleId = s.id WHERE asl.albumId = al.id) AS styles
                                     FROM Albums al
                                         JOIN Artists ar ON al.artistId = ar.id
                                         JOIN Labels la ON al.labelId = la.id
@@ -312,7 +314,9 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
                         LabelId = labelId,
                         SizeId = sizeId,
                         SpeedId = speedId,
+                        GenreIds = DbUtils.GetString(reader, "genreIds"),
                         Genres = DbUtils.GetString(reader, "genres"),
+                        StyleIds = DbUtils.GetString(reader, "styleIds"),
                         Styles = DbUtils.GetString(reader, "styles"),
                         Artist = new Artist()
                         {

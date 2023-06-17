@@ -178,12 +178,13 @@ export const RecordDetail = () => {
                             </div>
                         </div>
                         <div className="pt-5">
-                            {/* <button
+                            <button
                                 type="button"
+                                onClick={() => navigate(`/editAlbum/${albumId}`)}
                                 className="mr-1 rounded-md bg-crate-yellow px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 edit album
-                            </button> */}
+                            </button>
                             {
                                 inCollection() ? (
                                     <>

@@ -10,7 +10,7 @@ import { CrateForm } from "../crates/CrateForm";
 import { SearchResults } from "../search/SearchResults";
 import { AllRecords } from "../records/AllRecords";
 import { CrateDetail } from "../crates/CrateDetail";
-import { Crate } from "../crates/Crate";
+import { EditRecord } from "../records/EditRecord";
 
 export const ApplicationViews = () => {
     return (
@@ -33,6 +33,7 @@ export const ApplicationViews = () => {
             <Route path="/records/search/:searchCriterion" element={<SearchResults />} />
             <Route path="/allRecords" element={<AllRecords />} />
             <Route path="/crates/:crateId" element={<CrateDetail />} />
+            <Route path="/editAlbum/:albumId" element={<EditRecord />} />
         </Routes>
     )
 }

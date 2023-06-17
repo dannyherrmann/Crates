@@ -8,7 +8,9 @@ public class Album
     public string CatalogNumber { get; set; }
     public string? Photo { get; set; }
     public DateTime DateAdded { get; set; }
+    public string? GenreIds { get; set; }
     public string? Genres { get; set; }
+    public string? StyleIds{ get; set; }
     public string? Styles { get; set; }
     public int ArtistId { get; set; }
     public int? CountryId { get; set; }

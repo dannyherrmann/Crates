@@ -267,3 +267,14 @@ export const DeleteUserDig = async (userDigId) => {
     }
     await fetch(`${apiUrl}/userDigs/${userDigId}`, options)
 }
+
+export const UpdateAlbum = async (albumId, newAlbumObject) => {
+    const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newAlbumObject)
+    }
+    await fetch(`${apiUrl}/albums/${albumId}`, options)
+}
