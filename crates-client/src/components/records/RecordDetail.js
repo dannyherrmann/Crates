@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { FetchAlbum, FetchAlbumTracks, AddUserAlbum } from "../ApiManager"
+import { FetchAlbum, FetchAlbumTracks, AddUserAlbum, AddUserDig } from "../ApiManager"
 import { PlusSmallIcon } from '@heroicons/react/20/solid'
 import { PlusIcon } from '@heroicons/react/20/solid'
 
@@ -41,6 +41,20 @@ export const RecordDetail = () => {
         AddUserAlbum(userAlbumToSendToApi)
 
         navigate("/myRecords")
+    }
+
+    const addToDigs = (e) => {
+        e.preventDefault()
+
+        const userDigToSendToApi = {
+            userId: currentUser.id,
+            albumId: albumId,
+            dateAdded: new Date()
+        }
+
+        AddUserDig(userDigToSendToApi)
+
+        navigate("/myDigs")
     }
 
 
@@ -111,6 +125,7 @@ export const RecordDetail = () => {
                             </button>
                             <button
                                 type="button"
+                                onClick={(e) => addToDigs(e)}
                                 className="ml-1 rounded-md bg-crate-yellow px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 add to digs

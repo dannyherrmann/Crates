@@ -4,10 +4,9 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import cratesFont from '../images/crates-font.png'
 import { logout } from "../helpers/logout"
-import { Route, useNavigate } from 'react-router-dom'
+import { Route, useNavigate, Link } from 'react-router-dom'
 import { FetchUserByFirebaseId } from '../ApiManager'
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 
 export const NavBar = () => {
 
@@ -192,6 +191,15 @@ export const NavBar = () => {
                                             leaveTo="transform opacity-0 scale-95"
                                         >
                                             <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            <Menu.Item key="all-records">
+                                                    {({ active }) => (
+                                                        <Link to="/allRecords"
+                                                        className={classNames(
+                                                            active ? 'bg-gray-100' : '',
+                                                            'block px-4 py-2 text-sm text-gray-700'
+                                                        )}>All Records</Link>
+                                                    )}
+                                                </Menu.Item>
                                                 <Menu.Item key="sign-out">
                                                     {({ active }) => (
                                                         <a

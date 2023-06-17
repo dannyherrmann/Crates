@@ -153,6 +153,17 @@ export const AddUserAlbum = async (userAlbumObj) => {
     await fetch(`${apiUrl}/userAlbums`, options)
 }
 
+export const AddUserDig = async (userDigObj) => {
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userDigObj)
+    }
+    await fetch(`${apiUrl}/userDigs`, options)
+}
+
 export const FetchRecords = async (pageNumber, pageSize, sortOrder, searchCriterion) => {
     const response = await fetch(`${apiUrl}/albums?pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${sortOrder}&searchCriterion=${searchCriterion}`)
     const records = await response.json()
