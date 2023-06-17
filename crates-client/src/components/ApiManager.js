@@ -177,26 +177,14 @@ export const FetchAllRecordsSearch = async (searchCriterion) => {
     return records
 }
 
-export const FetchRecordsByGenre = async (genres) => {
-    const response = await fetch(`${apiUrl}/albums?genres=${genres}`)
+export const FetchAllRecordsByFilter = async (filterType, filter) => {
+    const response = await fetch(`${apiUrl}/albums?${filterType}=${filter}`)
     const records = await response.json()
     return records
 }
 
-export const FetchPagedRecordsGenre = async (pageNumber, pageSize, sortOrder, genres) => {
-    const response = await fetch(`${apiUrl}/albums?pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${sortOrder}&genres=${genres}`)
-    const records = await response.json()
-    return records
-}
-
-export const FetchRecordsByStyle = async (styles) => {
-    const response = await fetch(`${apiUrl}/albums?styles=${styles}`)
-    const records = await response.json()
-    return records
-}
-
-export const FetchPagedRecordsByStyle = async (pageNumber, pageSize, sortOrder, styles) => {
-    const response = await fetch(`${apiUrl}/albums?pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${sortOrder}&styles=${styles}`)
+export const FetchPagedRecordsByFilter = async (pageNumber, pageSize, sortOrder, filterType, filter) =>{
+    const response = await fetch(`${apiUrl}/albums?pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${sortOrder}&${filterType}=${filter}`)
     const records = await response.json()
     return records
 }

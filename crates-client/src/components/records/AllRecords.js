@@ -4,10 +4,8 @@ import {
     FetchPagedRecords,
     FetchGenres,
     FetchStyles,
-    FetchRecordsByGenre,
-    FetchPagedRecordsGenre,
-    FetchPagedRecordsByStyle,
-    FetchRecordsByStyle
+    FetchAllRecordsByFilter,
+    FetchPagedRecordsByFilter
 } from "../ApiManager"
 import { SearchRecord } from "../records/SearchRecord"
 import { useNavigate } from "react-router-dom"
@@ -22,9 +20,9 @@ export const AllRecords = () => {
     const [pageCount, setPageCount] = useState(0)
     const [filteredRecords, setFilteredRecords] = useState([])
     const [genres, setGenres] = useState([])
-    const [selectedGenres, setSelectedGenres] = useState([])
+    const [selectedGenre, setSelectedGenre] = useState([])
     const [styles, setStyles] = useState([])
-    const [selectedStyles, setSelectedStyles] = useState([])
+    const [selectedStyle, setSelectedStyle] = useState([])
     const [sortOptions, setSortOptions] = useState([
         { name: 'A-Z', value: 'Alphabetical' },
         { name: 'Date Added', value: 'DateAdded' },
@@ -54,62 +52,49 @@ export const AllRecords = () => {
         setFilteredRecords(records)
     }
 
-    const handleFilterChange = (filterName, selectedState, setSelectedState) => {
-        if (selectedState.includes(filterName)) {
-            setSelectedState(selectedState.filter(name => name != filterName))
-        } else {
-            setSelectedState([...selectedState, filterName])
-        }
-    }
-
     const fetchPageOne = async () => {
         const pageOne = await FetchPagedRecords(1, limit, sortOption.value)
         setFilteredRecords(pageOne)
     }
 
-    const fetchPageOneGenres = async () => {
-        const pageOne = await FetchPagedRecordsGenre(1, limit, sortOption.value, selectedGenres)
+    const fetchFilteredPageOne = async (filterType, filters) => {
+        const pageOne = await FetchPagedRecordsByFilter(1, limit, sortOption.value, filterType, filters)
         setFilteredRecords(pageOne)
     }
 
-    const fetchPageOneStyles = async () => {
-        const pageOne = await FetchPagedRecordsByStyle(1, limit, sortOption.value, selectedStyles)
-        setFilteredRecords(pageOne)
-    }
-    
-   useEffect(() => {
-    const getRecords = async () => {
-        const allRecords = await FetchAllRecords()
-        const totalRecordCount = allRecords.length
-        setPageCount(Math.ceil(totalRecordCount / limit))
-        fetchPageOne()
-    }
-    getRecords()
-    fetchGenres()
-    fetchStyles()
-   }, [sortOption])
+    useEffect(() => {
+        const getRecords = async () => {
+            const allRecords = await FetchAllRecords()
+            const totalRecordCount = allRecords.length
+            setPageCount(Math.ceil(totalRecordCount / limit))
+            fetchPageOne()
+        }
+        getRecords()
+        fetchGenres()
+        fetchStyles()
+    }, [sortOption])
 
-   useEffect(() => {
-    const getGenreRecords = async () => {
-        const allRecords = await FetchRecordsByGenre(selectedGenres)
-        const totalRecordCount = allRecords.length
-        setPageCount(Math.ceil(totalRecordCount / limit))
-        fetchPageOneGenres()
-        setFilteredRecords(allRecords)
-    }
-    getGenreRecords()
-   }, [selectedGenres])
+    useEffect(() => {
+        const getGenreRecords = async () => {
+            const allRecords = await FetchAllRecordsByFilter('genres', selectedGenre)
+            const totalRecordCount = allRecords.length
+            setPageCount(Math.ceil(totalRecordCount / limit))
+            fetchFilteredPageOne('genres', selectedGenre)
+            setFilteredRecords(allRecords)
+        }
+        getGenreRecords()
+    }, [selectedGenre, sortOption])
 
-   useEffect(() => {
-    const getStyleRecords = async () => {
-        const allRecords = await FetchRecordsByStyle(selectedStyles)
-        const totalRecordCount = allRecords.length
-        setPageCount(Math.ceil(totalRecordCount / limit))
-        fetchPageOneStyles()
-        setFilteredRecords(allRecords)
-    }
-    getStyleRecords()
-   }, [selectedStyles])
+    useEffect(() => {
+        const getStyleRecords = async () => {
+            const allRecords = await FetchAllRecordsByFilter('styles', selectedStyle)
+            const totalRecordCount = allRecords.length
+            setPageCount(Math.ceil(totalRecordCount / limit))
+            fetchFilteredPageOne('styles', selectedStyle)
+            setFilteredRecords(allRecords)
+        }
+        getStyleRecords()
+    }, [selectedStyle, sortOption])
 
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
@@ -215,6 +200,7 @@ export const AllRecords = () => {
                     <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900">Search Results</h1>
 
+
                         <div className="flex items-center">
                             <Menu as="div" className="relative inline-block text-left">
                                 <div>
@@ -281,6 +267,7 @@ export const AllRecords = () => {
                             {/* Filters */}
                             <form className="hidden lg:block">
                                 <h3 className="sr-only">Categories</h3>
+
                                 {/* GENRES */}
                                 <Disclosure as="div" className="border-b border-gray-200 py-6">
                                     {({ open }) => (
@@ -290,7 +277,7 @@ export const AllRecords = () => {
                                                     <span className="font-medium text-gray-900">Genres</span>
                                                     <span className="ml-6 flex items-center">
                                                         {open ? (
-                                                            <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                                                            <MinusIcon className="h-5 w-5" aria-hidden="true" onClick={() => { setSelectedGenre([]) }} />
                                                         ) : (
                                                             <PlusIcon className="h-5 w-5" aria-hidden="true" />
                                                         )}
@@ -299,27 +286,15 @@ export const AllRecords = () => {
                                             </h3>
                                             <Disclosure.Panel className="pt-6">
                                                 <div className="space-y-4">
-                                                    {genres.map((option, optionIdx) => (
-                                                        <div key={option.value} className="flex items-center">
-                                                            <input
-                                                                id={`filter-${option.id}-${optionIdx}`}
-                                                                name={`${option.id}[]`}
-                                                                defaultValue={option.value}
-                                                                type="checkbox"
-                                                                defaultChecked={option.checked}
-                                                                className="h-4 w-4 rounded border-gray-300 text-black focus:ring-indigo-500"
-                                                                onClick={() => {
-                                                                    handleFilterChange(option.name, selectedGenres, setSelectedGenres)
-                                                                }}
-                                                            />
-                                                            <label
-                                                                htmlFor={`filter-${option.id}-${optionIdx}`}
-                                                                className="ml-3 text-sm text-black"
-                                                            >
-                                                                {option.name}
-                                                            </label>
-                                                        </div>
-                                                    ))}
+                                                    <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                                                        {genres.map((genre) => (
+                                                            <li key={genre.name}>
+                                                                <a onClick={() => {
+                                                                    setSelectedGenre(genre.name)
+                                                                }}>{genre.name}</a>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
                                                 </div>
                                             </Disclosure.Panel>
                                         </>
@@ -334,7 +309,7 @@ export const AllRecords = () => {
                                                     <span className="font-medium text-gray-900">Styles</span>
                                                     <span className="ml-6 flex items-center">
                                                         {open ? (
-                                                            <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                                                            <MinusIcon className="h-5 w-5" aria-hidden="true" onClick={() => { setSelectedStyle([]) }} />
                                                         ) : (
                                                             <PlusIcon className="h-5 w-5" aria-hidden="true" />
                                                         )}
@@ -343,27 +318,15 @@ export const AllRecords = () => {
                                             </h3>
                                             <Disclosure.Panel className="pt-6">
                                                 <div className="space-y-4">
-                                                    {styles.map((option, optionIdx) => (
-                                                        <div key={option.value} className="flex items-center">
-                                                            <input
-                                                                id={`filter-${option.id}-${optionIdx}`}
-                                                                name={`${option.id}[]`}
-                                                                defaultValue={option.value}
-                                                                type="checkbox"
-                                                                defaultChecked={option.checked}
-                                                                className="h-4 w-4 rounded border-gray-300 text-black focus:ring-indigo-500"
-                                                                onClick={() => {
-                                                                    handleFilterChange(option.name, selectedStyles, setSelectedStyles)
-                                                                }}
-                                                            />
-                                                            <label
-                                                                htmlFor={`filter-${option.id}-${optionIdx}`}
-                                                                className="ml-3 text-sm text-black"
-                                                            >
-                                                                {option.name}
-                                                            </label>
-                                                        </div>
-                                                    ))}
+                                                    <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                                                        {styles.map((style) => (
+                                                            <li key={style.name}>
+                                                                <a onClick={() => {
+                                                                    setSelectedStyle(style.name)
+                                                                }}>{style.name}</a>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
                                                 </div>
                                             </Disclosure.Panel>
                                         </>
