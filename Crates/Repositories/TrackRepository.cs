@@ -146,7 +146,7 @@ public class TrackRepository : BaseRepository, ITrackRepository
                         Name = DbUtils.GetString(reader, "trackName"),
                         Position = DbUtils.GetString(reader, "position"),
                         Duration = DbUtils.GetTimeSpan(reader, "duration"),
-                        Bpm = DbUtils.GetInt(reader, "bpm"),
+                        Bpm = DbUtils.GetNullableInt(reader, "bpm"),
                         Key = DbUtils.GetString(reader, "key"),
                         AlbumId = DbUtils.GetInt(reader, "albumId"),
                         ArtistName = DbUtils.GetString(reader, "artistName"),
