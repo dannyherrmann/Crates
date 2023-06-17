@@ -42,20 +42,42 @@ export const CrateDetail = () => {
 
             <div className="mr-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:grid-cols-1 lg:gap-x-8 lg:px-8 bg-black font-Space-Mono text-crate-yellow">
                 <div>
-                    <table>
-                        <tbody>
-                            {crateTracks.map((crateTrack) => {
-                                return (
-                                    <tr>
-                                        <td>{crateTrack.track.position}&emsp;&emsp;</td>
-                                        <td>{crateTrack.track.name}&emsp;&emsp;</td>
-                                        <td>{crateTrack.track.duration}&emsp;&emsp;</td>
-                                        <td>{crateTrack.track.key}&emsp;&emsp;</td>
-                                        <td>{crateTrack.bpm}&emsp;&emsp;</td>
-                                        <td>{crateTrack.track.bpm}</td>
-                                    </tr>
-                                )
-                            })}
+                    <table className="min-w-full divide-y divide-gray-300">
+                        <thead>
+                            <tr>
+                                <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0">
+                                    Position
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold ">
+                                    Title
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold ">
+                                    Duration
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold ">
+                                    Key
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold ">
+                                    Track BPM
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold ">
+                                    My BPM
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {crateTracks.map((crateTrack) => (
+                                <tr key={crateTrack.id}>
+                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium  sm:pl-0">
+                                        {crateTrack.track.position}
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm ">{crateTrack.track.name}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm ">{crateTrack.track.duration}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm ">{crateTrack.track.key}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm ">{crateTrack.track.bpm}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm ">{crateTrack.bpm}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
