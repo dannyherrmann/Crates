@@ -14,7 +14,7 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
         Alphabetical,
         Artist
     }
-    public List<Album> GetAllAlbums(int? pageNumber, int? pageSize, SortOrder sortOrder, string? genres = null, string? styles = null, string? searchCriterion = null)
+    public List<Album> GetAllAlbums(int? pageNumber, int? pageSize, int? decade, SortOrder sortOrder, string? genres = null, string? styles = null, string? searchCriterion = null, string? albumCountry = null)
     {
         using (var conn = Connection)
         {
@@ -71,6 +71,16 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
                               )";
                 }
 
+                if (!string.IsNullOrEmpty(albumCountry))
+                {
+                    sql += " AND co.name = @albumCountry";
+                }
+
+                if (decade.HasValue)
+                {
+                    sql += " AND FLOOR(al.[year] / 10) * 10 = @Decade";
+                }
+
                 if (!string.IsNullOrEmpty(searchCriterion))
                 {
                     sql += " AND (al.name LIKE @Criterion OR ar.name LIKE @Criterion)";
@@ -101,6 +111,8 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
                 DbUtils.AddParameter(cmd, "@Genres", genres);
                 DbUtils.AddParameter(cmd, "@Styles", styles);
                 DbUtils.AddParameter(cmd, "@Criterion", $"%{searchCriterion}%");
+                DbUtils.AddParameter(cmd, "@albumCountry", albumCountry);
+                DbUtils.AddParameter(cmd, "@Decade", decade);
 
                 var reader = cmd.ExecuteReader();
                 var albums = new List<Album>();
@@ -318,6 +330,33 @@ public class AlbumRepository : BaseRepository, IAlbumRepository
 
                 reader.Close();
                 return album;
+            }
+        }
+    }
+
+    public List<int> GetAlbumDecades()
+    {
+        using (var conn = Connection)
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"SELECT
+                                        FLOOR([year] / 10) * 10 as decade
+                                    FROM Albums
+                                    GROUP BY FLOOR([year] / 10) * 10
+                                    ORDER BY decade";
+
+                var reader = cmd.ExecuteReader();
+                var decades = new List<int>();
+
+                while (reader.Read())
+                {
+                    decades.Add(DbUtils.GetInt(reader, "decade"));
+                }
+
+                reader.Close();
+                return decades;
             }
         }
     }

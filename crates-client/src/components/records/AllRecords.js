@@ -5,7 +5,9 @@ import {
     FetchGenres,
     FetchStyles,
     FetchAllRecordsByFilter,
-    FetchPagedRecordsByFilter
+    FetchPagedRecordsByFilter,
+    FetchCountries,
+    FetchDecades
 } from "../ApiManager"
 import { SearchRecord } from "../records/SearchRecord"
 import { useNavigate } from "react-router-dom"
@@ -16,13 +18,16 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon } from '@heroicons/rea
 import ReactPaginate from "react-paginate"
 
 export const AllRecords = () => {
-    const [records, setRecords] = useState([])
-    const [pageCount, setPageCount] = useState(0)
     const [filteredRecords, setFilteredRecords] = useState([])
+    const [pageCount, setPageCount] = useState(0)
     const [genres, setGenres] = useState([])
     const [selectedGenre, setSelectedGenre] = useState([])
     const [styles, setStyles] = useState([])
     const [selectedStyle, setSelectedStyle] = useState([])
+    const [countries, setCountries] = useState([])
+    const [selectedCountry, setSelectedCountry] = useState([])
+    const [decades, setDecades] = useState([])
+    const [selectedDecade, setSelectedDecade] = useState([])
     const [sortOptions, setSortOptions] = useState([
         { name: 'A-Z', value: 'Alphabetical' },
         { name: 'Date Added', value: 'DateAdded' },
@@ -44,6 +49,16 @@ export const AllRecords = () => {
     const fetchStyles = async () => {
         const styles = await FetchStyles()
         setStyles(styles)
+    }
+
+    const fetchCountries = async () => {
+        const countries = await FetchCountries()
+        setCountries(countries)
+    }
+
+    const fetchDecades = async () => {
+        const decades = await FetchDecades()
+        setDecades(decades)
     }
 
     const handlePageClick = async (data) => {
@@ -72,6 +87,8 @@ export const AllRecords = () => {
         getRecords()
         fetchGenres()
         fetchStyles()
+        fetchCountries()
+        fetchDecades()
     }, [sortOption])
 
     useEffect(() => {
@@ -80,7 +97,7 @@ export const AllRecords = () => {
             const totalRecordCount = allRecords.length
             setPageCount(Math.ceil(totalRecordCount / limit))
             fetchFilteredPageOne('genres', selectedGenre)
-            setFilteredRecords(allRecords)
+            // setFilteredRecords(allRecords)
         }
         getGenreRecords()
     }, [selectedGenre, sortOption])
@@ -91,10 +108,34 @@ export const AllRecords = () => {
             const totalRecordCount = allRecords.length
             setPageCount(Math.ceil(totalRecordCount / limit))
             fetchFilteredPageOne('styles', selectedStyle)
-            setFilteredRecords(allRecords)
+            // setFilteredRecords(allRecords)
         }
         getStyleRecords()
     }, [selectedStyle, sortOption])
+
+    useEffect(() => {
+        const getCountryRecords = async () => {
+            const allRecords = FetchAllRecordsByFilter('country', selectedCountry)
+            const totalRecordCount = allRecords.length
+            setPageCount(Math.ceil(totalRecordCount / limit))
+            fetchFilteredPageOne('country', selectedCountry)
+            // setFilteredRecords(allRecords)
+        }
+
+        getCountryRecords()
+
+
+    }, [selectedCountry, sortOption])
+
+    useEffect(() => {
+        const getDecadeRecords = async () => {
+            const allRecords = FetchAllRecordsByFilter('decade', selectedDecade)
+            const totalRecordCount = allRecords.length
+            setPageCount(Math.ceil(totalRecordCount / limit))
+            fetchFilteredPageOne('decade', selectedDecade)
+        }
+        getDecadeRecords()
+    }, [selectedDecade, sortOption])
 
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
@@ -198,7 +239,7 @@ export const AllRecords = () => {
 
                 <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Search Results</h1>
+                        <h1 className="text-4xl font-bold tracking-tight text-gray-900">All Records</h1>
 
 
                         <div className="flex items-center">
@@ -324,6 +365,70 @@ export const AllRecords = () => {
                                                                 <a onClick={() => {
                                                                     setSelectedStyle(style.name)
                                                                 }}>{style.name}</a>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </Disclosure.Panel>
+                                        </>
+                                    )}
+                                </Disclosure>
+                                {/* COUNTRIES */}
+                                <Disclosure as="div" className="border-b border-gray-200 py-6">
+                                    {({ open }) => (
+                                        <>
+                                            <h3 className="-my-3 flow-root">
+                                                <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                    <span className="font-medium text-gray-900">Country</span>
+                                                    <span className="ml-6 flex items-center">
+                                                        {open ? (
+                                                            <MinusIcon className="h-5 w-5" aria-hidden="true" onClick={() => { setSelectedCountry([]) }} />
+                                                        ) : (
+                                                            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                                        )}
+                                                    </span>
+                                                </Disclosure.Button>
+                                            </h3>
+                                            <Disclosure.Panel className="pt-6">
+                                                <div className="space-y-4">
+                                                    <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                                                        {countries.map((country) => (
+                                                            <li key={country.name}>
+                                                                <a onClick={() => {
+                                                                    setSelectedCountry(country.name)
+                                                                }}>{country.name}</a>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </Disclosure.Panel>
+                                        </>
+                                    )}
+                                </Disclosure>
+                                {/* DECADES */}
+                                <Disclosure as="div" className="border-b border-gray-200 py-6">
+                                    {({ open }) => (
+                                        <>
+                                            <h3 className="-my-3 flow-root">
+                                                <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                    <span className="font-medium text-gray-900">Decades</span>
+                                                    <span className="ml-6 flex items-center">
+                                                        {open ? (
+                                                            <MinusIcon className="h-5 w-5" aria-hidden="true" onClick={() => { setSelectedDecade([]) }} />
+                                                        ) : (
+                                                            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                                        )}
+                                                    </span>
+                                                </Disclosure.Button>
+                                            </h3>
+                                            <Disclosure.Panel className="pt-6">
+                                                <div className="space-y-4">
+                                                    <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                                                        {decades.map((decade) => (
+                                                            <li key={decade}>
+                                                                <a onClick={() => {
+                                                                    setSelectedDecade(decade)
+                                                                }}>{decade}</a>
                                                             </li>
                                                         ))}
                                                     </ul>

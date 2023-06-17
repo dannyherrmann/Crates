@@ -183,8 +183,14 @@ export const FetchAllRecordsByFilter = async (filterType, filter) => {
     return records
 }
 
-export const FetchPagedRecordsByFilter = async (pageNumber, pageSize, sortOrder, filterType, filter) =>{
+export const FetchPagedRecordsByFilter = async (pageNumber, pageSize, sortOrder, filterType, filter) => {
     const response = await fetch(`${apiUrl}/albums?pageNumber=${pageNumber}&pageSize=${pageSize}&sortOrder=${sortOrder}&${filterType}=${filter}`)
     const records = await response.json()
     return records
+}
+
+export const FetchDecades = async () => {
+    const response = await fetch(`${apiUrl}/albums/decades`)
+    const decades = await response.json()
+    return decades
 }

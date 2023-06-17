@@ -16,9 +16,9 @@ public class AlbumsController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetAllAlbums(int? pageNumber, int? pageSize, AlbumRepository.SortOrder sortOrder, string? genres = null, string? styles = null, string? searchCriterion = null)
+    public IActionResult GetAllAlbums(int? pageNumber, int? pageSize, int? decade, AlbumRepository.SortOrder sortOrder, string? genres = null, string? styles = null, string? searchCriterion = null, string? country = null)
     {
-        return Ok(_albumRepo.GetAllAlbums(pageNumber, pageSize, sortOrder, genres, styles, searchCriterion));
+        return Ok(_albumRepo.GetAllAlbums(pageNumber, pageSize, decade, sortOrder, genres, styles, searchCriterion, country));
     }
 
     [HttpGet("{id}")]
@@ -30,6 +30,12 @@ public class AlbumsController : Controller
             return NotFound();
         }
         return Ok(album);
+    }
+
+    [HttpGet("decades")]
+    public IActionResult GetAlbumDecades()
+    {
+        return Ok(_albumRepo.GetAlbumDecades());
     }
 
     [HttpPost]
