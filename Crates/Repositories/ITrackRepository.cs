@@ -9,7 +9,7 @@ namespace Crates.Repositories
         List<Track> GetAlbumTracks(int albumId);
         void Add(Track track);
         void Update(Track track);
-        void Delete(int id);
+        void Delete(int albumId);
         Track GetById(int id);
     }
 }

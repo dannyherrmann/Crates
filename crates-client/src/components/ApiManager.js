@@ -278,3 +278,31 @@ export const UpdateAlbum = async (albumId, newAlbumObject) => {
     }
     await fetch(`${apiUrl}/albums/${albumId}`, options)
 }
+
+export const DeleteAlbumGenre = async (albumId) => {
+    const options = {
+        method: "DELETE",
+    }
+    await fetch(`${apiUrl}/albumGenres/${albumId}`, options)
+}
+
+export const DeleteAlbumStyles = async (albumId) => {
+    const options = {
+        method: "DELETE",
+    }
+    await fetch(`${apiUrl}/albumStyles/${albumId}`, options)
+}
+
+export const DeleteAlbumTracks = async (albumId) => {
+    const options = {
+        method: "DELETE",
+    }
+    await fetch(`${apiUrl}/tracks/${albumId}`, options)
+}
+
+export const DeleteAlbum = async (albumId) => {
+    const options = {
+        method: "DELETE",
+    }
+    await fetch(`${apiUrl}/albums/${albumId}`, options)
+}

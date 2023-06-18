@@ -8,7 +8,8 @@ import {
     FetchUserRecords,
     FetchUserDigs,
     DeleteUserAlbum,
-    DeleteUserDig
+    DeleteUserDig,
+    DeleteAlbum
 }
     from "../ApiManager"
 
@@ -125,6 +126,12 @@ export const RecordDetail = () => {
         navigate("/myDigs")
     }
 
+    const deleteAlbum = async (e) => {
+        e.preventDefault()
+        await DeleteAlbum(parseInt(albumId))
+        navigate("/myRecords")
+    }
+
 
     return (
         <div>
@@ -231,6 +238,13 @@ export const RecordDetail = () => {
                                     </>
                                 )
                             }
+                            {/* <button
+                                type="button"
+                                onClick={(e) => deleteAlbum(e)}
+                                className="ml-1 rounded-md bg-crate-yellow px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            >
+                                delete album
+                            </button> */}
                         </div>
 
                     </div>

@@ -10,7 +10,7 @@ public class Album
     public DateTime DateAdded { get; set; }
     public string? GenreIds { get; set; }
     public string? Genres { get; set; }
-    public string? StyleIds{ get; set; }
+    public string? StyleIds { get; set; }
     public string? Styles { get; set; }
     public int ArtistId { get; set; }
     public int? CountryId { get; set; }

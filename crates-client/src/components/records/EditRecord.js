@@ -13,7 +13,10 @@ import {
     AddAlbumGenre,
     AddAlbumStyle,
     AddTrack,
-    UpdateAlbum
+    UpdateAlbum,
+    DeleteAlbumGenre,
+    DeleteAlbumStyles,
+    DeleteAlbumTracks
 } from "../ApiManager"
 import {
     Transition,
@@ -39,10 +42,13 @@ export const EditRecord = () => {
     const [selectedSpeed, setSelectedSpeed] = useState({})
     const [genres, setGenres] = useState([])
     const [selectedGenres, setSelectedGenres] = useState([])
+    const [currentGenres, setCurrentGenres] = useState([])
     const [styles, setStyles] = useState([])
     const [selectedStyles, setSelectedStyles] = useState([])
+    const [currentStyles, setCurrentStyles] = useState([])
     const [image, setImage] = useState(null)
     const [tracks, setTracks] = useState([])
+    const [currentTracks, setCurrentTracks] = useState([])
 
     const navigate = useNavigate()
 
@@ -54,8 +60,14 @@ export const EditRecord = () => {
         setSelectedLabel(album.label)
         setSelectedSize(album.size)
         setSelectedSpeed(album.speed)
-        setSelectedGenres(album.genreIds.split(',').map(Number))
-        setSelectedStyles(album.styleIds.split(',').map(Number))
+        if (album.genreIds?.length > 0) {
+            setSelectedGenres(album.genreIds?.split(',').map(Number))
+            setCurrentGenres(album.genreIds?.split(',').map(Number))
+        }
+        if (album.styleIds?.length > 0) {
+            setSelectedStyles(album.styleIds?.split(',').map(Number))
+            setCurrentStyles(album.styleIds?.split(',').map(Number))
+        }
         setImage(album.photo)
     }
 
@@ -97,6 +109,7 @@ export const EditRecord = () => {
     const fetchAlbumTracks = async () => {
         const albumTracks = await FetchAlbumTracks(albumId)
         setTracks(albumTracks)
+        setCurrentTracks(albumTracks)
     }
 
     const addTrack = () => {
@@ -178,6 +191,54 @@ export const EditRecord = () => {
             }
 
             await UpdateAlbum(albumToSendToApi.id, albumToSendToApi) 
+
+            if (currentGenres?.length > 0) {
+                DeleteAlbumGenre(parseInt(albumId))
+
+                for (const genre of selectedGenres) {
+
+                    const albumGenreObj = {
+                        albumId: parseInt(albumId),
+                        genreId: genre
+                    }
+                    await AddAlbumGenre(albumGenreObj)
+                }
+            }
+
+            if (currentGenres?.length === 0 && selectedGenres.length > 0) {
+                for (const genre of selectedGenres) {
+
+                    const albumGenreObj = {
+                        albumId: parseInt(albumId),
+                        genreId: genre
+                    }
+                    await AddAlbumGenre(albumGenreObj)
+                }
+            }
+
+            if (currentStyles?.length > 0) {
+                DeleteAlbumStyles(parseInt(albumId))
+
+                for (const style of selectedStyles) {
+
+                    const albumStyleObj = {
+                        albumId: parseInt(albumId),
+                        styleId: style 
+                    }
+                    await AddAlbumStyle(albumStyleObj)
+                }
+            }
+
+            if (currentStyles?.length === 0 && selectedStyles.length > 0) {
+                for (const style of selectedStyles) {
+
+                    const albumStyleObj = {
+                        albumId: parseInt(albumId),
+                        styleId: style 
+                    }
+                    await AddAlbumStyle(albumStyleObj)
+                }
+            }
 
             navigate(`/albums/${albumId}`)
         }
@@ -773,7 +834,7 @@ export const EditRecord = () => {
                                                         id={genre.id}
                                                         name="genres"
                                                         type="checkbox"
-                                                        checked={selectedGenres.includes(genre.id)}
+                                                        checked={selectedGenres?.includes(genre.id)}
                                                         onChange={(e) => handleGenreChange(e)}
                                                         className="h-4 w-4 rounded border-gray-300 text-black focus:ring-crate-yellow"
                                                     />
@@ -802,7 +863,7 @@ export const EditRecord = () => {
                                                         id={style.id}
                                                         name="styles"
                                                         type="checkbox"
-                                                        checked={selectedStyles.includes(style.id)}
+                                                        checked={selectedStyles?.includes(style.id)}
                                                         onChange={(e) => handleStyleChange(e)}
                                                         className="h-4 w-4 rounded border-gray-300 text-black focus:ring-crate-yellow"
                                                     />
@@ -824,7 +885,7 @@ export const EditRecord = () => {
             </form>
 
             {/* TRACKS */}
-            <form>
+            {/* <form>
                 <div>
                     <label
                         htmlFor="project-name"
@@ -872,7 +933,7 @@ export const EditRecord = () => {
                 })}
                 <button type="button" onClick={addTrack} className='rounded-md bg-crate-yellow px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mt-3'>Add Track</button>
                 <button type="button" onClick={removeTrack} className='rounded-md bg-red-400 px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>Remove Track</button>
-            </form>
+            </form> */}
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
                 <button type="button" className="text-sm font-semibold leading-6 text-gray-900" onClick={() => navigate("/")}>

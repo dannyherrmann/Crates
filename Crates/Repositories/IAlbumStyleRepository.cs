@@ -6,6 +6,6 @@ namespace Crates.Repositories
     {
         List<AlbumStyle> GetAllAlbumStyles();
         void Add(AlbumStyle albumStyle);
-        void Delete(int id);
+        void Delete(int albumId);
     }
 }

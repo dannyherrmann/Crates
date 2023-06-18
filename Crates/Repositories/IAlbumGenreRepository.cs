@@ -6,6 +6,6 @@ namespace Crates.Repositories
     {
         List<AlbumGenre> GetAllAlbumGenres();
         void Add(AlbumGenre albumGenre);
-        void Delete(int id);
+        void Delete(int albumId);
     }
 }

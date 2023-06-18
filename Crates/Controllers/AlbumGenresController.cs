@@ -22,6 +22,8 @@ public class AlbumGenresController : Controller
         return Ok(_albumGenreRepo.GetAllAlbumGenres());
     }
 
+    [HttpGet]
+
     [HttpPost]
     public IActionResult Post(AlbumGenre albumGenre)
     {
@@ -29,10 +31,10 @@ public class AlbumGenresController : Controller
         return Created("/albumGenre/" + albumGenre.Id, albumGenre);
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    [HttpDelete("{albumId}")]
+    public IActionResult Delete(int albumId)
     {
-        _albumGenreRepo.Delete(id);
+        _albumGenreRepo.Delete(albumId);
         return NoContent();
     }
 }

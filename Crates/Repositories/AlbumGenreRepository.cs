@@ -63,15 +63,15 @@ public class AlbumGenreRepository : BaseRepository, IAlbumGenreRepository
         }
     }
 
-    public void Delete(int id)
+    public void Delete(int albumId)
     {
         using (var conn = Connection)
         {
             conn.Open();
             using (var cmd = conn.CreateCommand())
             {
-                cmd.CommandText = "DELETE FROM [AlbumGenres] WHERE id = @id";
-                DbUtils.AddParameter(cmd, "@id", id);
+                cmd.CommandText = "DELETE FROM [AlbumGenres] WHERE albumId = @albumId";
+                DbUtils.AddParameter(cmd, "@albumId", albumId);
                 cmd.ExecuteNonQuery();
             }
         }

@@ -29,10 +29,10 @@ public class AlbumStylesController : Controller
         return Created("/albumStyle/" + albumStyle.Id, albumStyle);
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    [HttpDelete("{albumId}")]
+    public IActionResult Delete(int albumId)
     {
-        _albumStyleRepo.Delete(id);
+        _albumStyleRepo.Delete(albumId);
         return NoContent();
     }
 }

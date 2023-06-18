@@ -64,10 +64,10 @@ public class TracksController : Controller
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    [HttpDelete("{albumId}")]
+    public IActionResult Delete(int albumId)
     {
-        _trackRepo.Delete(id);
+        _trackRepo.Delete(albumId);
         return NoContent();
     }
 }
