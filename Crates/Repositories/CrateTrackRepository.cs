@@ -97,15 +97,15 @@ public class CrateTrackRepository : BaseRepository, ICrateTrackRepository
         }
     }
 
-    public void Delete(int id)
+    public void Delete(int crateId)
     {
         using (var conn = Connection)
         {
             conn.Open();
             using (var cmd = conn.CreateCommand())
             {
-                cmd.CommandText = @"DELETE FROM [CrateTracks] WHERE id = @id";
-                DbUtils.AddParameter(cmd, "@id", id);
+                cmd.CommandText = @"DELETE FROM [CrateTracks] WHERE crateId = @crateId";
+                DbUtils.AddParameter(cmd, "@crateId", crateId);
                 cmd.ExecuteNonQuery();
             }
         }

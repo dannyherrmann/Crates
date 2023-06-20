@@ -11,6 +11,7 @@ import { SearchResults } from "../search/SearchResults";
 import { AllRecords } from "../records/AllRecords";
 import { CrateDetail } from "../crates/CrateDetail";
 import { EditRecord } from "../records/EditRecord";
+import { NavBar } from "../nav/NavBar";
 
 export const ApplicationViews = () => {
     return (
@@ -19,7 +20,9 @@ export const ApplicationViews = () => {
             path="/"
             element={
                 <>
+                {/* <NavBar /> */}
                 <Home />
+                {/* <Outlet /> */}
                 </>
             }
             ></Route>
@@ -34,6 +37,7 @@ export const ApplicationViews = () => {
             <Route path="/allRecords" element={<AllRecords />} />
             <Route path="/crates/:crateId" element={<CrateDetail />} />
             <Route path="/editAlbum/:albumId" element={<EditRecord />} />
+            
         </Routes>
     )
 }

@@ -6,6 +6,6 @@ namespace Crates.Repositories
     {
         List<CrateTrack> GetAllCrateTracks(int crateId); 
         void Add(CrateTrack crateTrack);
-        void Delete(int id);
+        void Delete(int crateId);
     }
 }

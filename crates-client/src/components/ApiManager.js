@@ -306,3 +306,17 @@ export const DeleteAlbum = async (albumId) => {
     }
     await fetch(`${apiUrl}/albums/${albumId}`, options)
 }
+
+export const DeleteCrateTrack = async (crateId) => {
+    const options = {
+        method: "DELETE",
+    }
+    await fetch(`${apiUrl}/crateTracks/${crateId}`, options)
+}
+
+export const DeleteUserCrate = async (crateId) => {
+    const options = {
+        method: "DELETE",
+    }
+    await fetch(`${apiUrl}/userCrates/${crateId}`, options)
+}

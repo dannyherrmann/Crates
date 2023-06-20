@@ -76,7 +76,8 @@ public class TrackRepository : BaseRepository, ITrackRepository
                                     FROM Tracks t
                                         JOIN Albums al ON t.albumId = al.id
                                         JOIN Artists ar ON al.artistId = ar.id
-                                    WHERE albumId = @albumId";
+                                    WHERE albumId = @albumId
+                                    ORDER BY t.[position]";
 
                 DbUtils.AddParameter(cmd, "@albumId", albumId);
 

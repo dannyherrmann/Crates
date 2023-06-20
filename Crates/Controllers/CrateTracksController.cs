@@ -29,10 +29,10 @@ public class CrateTracksController : Controller
         return Created("/crateTrack" + crateTrack.Id, crateTrack);
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    [HttpDelete("{crateId}")]
+    public IActionResult Delete(int crateId)
     {
-        _crateTrackRepo.Delete(id);
+        _crateTrackRepo.Delete(crateId);
         return NoContent();
     }
 }
